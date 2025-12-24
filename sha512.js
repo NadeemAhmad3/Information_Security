@@ -218,6 +218,9 @@ function renderSHA512(container) {
         </div>
     `;
     feather.replace();
+    
+    // Add the Hash Introduction section after the main content
+    addHashIntro();
 }
 
 // --- LOGIC ENGINE ---
@@ -332,4 +335,194 @@ function appendContent(html) {
     div.innerHTML = html;
     zone.appendChild(div);
     feather.replace();
+}
+
+// NEW SECTION: HASH INTRODUCTION
+// Call this function to append the definition and requirements.
+// NEW SECTION: HASH INTRODUCTION
+// Call this function to append the definition and requirements.
+function addHashIntro() {
+    const html = `
+        <div class="viz-section" style="margin-top: 40px; border-top: 2px solid #f1f5f9; padding-top: 40px;">
+            
+            <div class="module-header">
+                <div class="module-title" style="color:#334155;">
+                    <i data-feather="check-circle" style="color:#10b981;"></i> The Solution: Hash Functions
+                </div>
+                <div class="module-subtitle">
+                    To prevent the integrity loss shown above, we use a <strong>Hash Function</strong>. 
+                    It acts as a digital fingerprint for data.
+                </div>
+            </div>
+
+            <div style="background: #eef2ff; border-left: 4px solid #6366f1; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+                <h3 style="margin:0 0 10px 0; color:#312e81; font-size:1.1rem;">Definition</h3>
+                <p style="margin:0; font-family:'JetBrains Mono', monospace; color:#4338ca;">
+                    h = H(M)
+                </p>
+                <p style="margin:10px 0 0 0; color:#4b5563; font-size:0.95rem;">
+                    A hash function <strong>H</strong> accepts a variable-length block of data <strong>M</strong> 
+                    as input and produces a fixed-size hash value <strong>h</strong> (e.g., 512 bits for SHA-512).
+                </p>
+            </div>
+
+            <div style="background:white; border:1px solid #e2e8f0; border-radius:12px; padding:25px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom:30px;">
+                <h4 style="margin-top:0;">Visualizing the Concept: Variable Input to Fixed Block</h4>
+                <p style="color:#64748b; font-size:0.9rem; margin-bottom:20px;">
+                    How do we handle "Variable Length" input? We use <strong>Padding</strong> to fill the empty space, ensuring the data fits into fixed-size blocks (1024 bits for SHA-512). The padding is <strong>deterministic</strong> - it always follows the same pattern regardless of message length.
+                </p>
+
+                <input type="text" id="hash-input-demo" placeholder="Type a message here..." 
+                       oninput="updateBlockViz(this.value)"
+                       style="width:100%; padding:12px; border:2px solid #cbd5e1; border-radius:8px; font-family:'JetBrains Mono'; margin-bottom:20px; outline:none; transition:border 0.2s;">
+
+                <div style="display:flex; height:60px; width:100%; border:2px solid #334155; border-radius:6px; overflow:hidden; font-family:monospace; font-weight:bold; color:white;">
+                    <div id="viz-msg" style="width:0%; background:#3b82f6; display:flex; align-items:center; justify-content:center; transition:width 0.2s;">M</div>
+                    <div id="viz-pad" style="flex:1; background:#94a3b8; display:flex; align-items:center; justify-content:center; border-left:1px solid white;">Padding</div>
+                    <div style="width:15%; background:#0f172a; display:flex; align-items:center; justify-content:center; border-left:1px solid white;">Len</div>
+                </div>
+                
+                <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:0.75rem; color:#64748b; font-family:'JetBrains Mono';">
+                    <span>Variable Message (M) - <span id="bit-count">0 bits</span></span>
+                    <span>Fixed Block Size: 1024 bits total (M + Padding + Length)</span>
+                </div>
+                
+                <div style="margin-top:15px; padding:12px; background:#f0f9ff; border-radius:6px; border-left:3px solid #0ea5e9;">
+                    <p style="margin:0; font-size:0.85rem; color:#0369a1;">
+                        <strong>Note:</strong> Padding doesn't "expand" with message length because it's designed to fill exactly what's needed to reach 1024 bits. The length field (last 128 bits) stores the original message size in bits.
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="margin-bottom:15px;">Requirements for Hash Functions</h4>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    
+                    <div class="req-card">
+                        <div class="req-num">1</div>
+                        <div class="req-text">Can be applied to <strong>any sized message M</strong>.</div>
+                    </div>
+                    <div class="req-card">
+                        <div class="req-num">2</div>
+                        <div class="req-text">Produces <strong>fixed-length output h</strong> (e.g., 512 bits).</div>
+                    </div>
+                    <div class="req-card">
+                        <div class="req-num">3</div>
+                        <div class="req-text">Is <strong>easy to compute</strong> h = H(M).</div>
+                    </div>
+                    <div class="req-card">
+                        <div class="req-num">4</div>
+                        <div class="req-text">
+                            <strong>One-way property (Preimage Resistance):</strong><br>
+                            Given hash h, it's computationally infeasible to find any message x such that H(x) = h.<br>
+                            <small style="color:#6b7280; display:block; margin-top:4px;">
+                                <strong>Example:</strong> If h = H("secret"), given only h, you can't find "secret".
+                            </small>
+                        </div>
+                    </div>
+                    <div class="req-card">
+                        <div class="req-num">5</div>
+                        <div class="req-text">
+                            <strong>Weak Collision Resistance (2nd Preimage Resistance):</strong><br>
+                            Given message x, it's infeasible to find a different message y such that H(y) = H(x).<br>
+                            <small style="color:#6b7280; display:block; margin-top:4px;">
+                                <strong>Example:</strong> If Alice sends "Transfer $100" with hash h, Eve can't find "Transfer $1000" with same h.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="req-card">
+                        <div class="req-num">6</div>
+                        <div class="req-text">
+                            <strong>Strong Collision Resistance:</strong><br>
+                            It's infeasible to find any pair of messages (x, y) where x ≠ y but H(x) = H(y).<br>
+                            <small style="color:#6b7280; display:block; margin-top:4px;">
+                                <strong>Example:</strong> An attacker can't find any two contracts with identical hashes.
+                            </small>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div style="margin-top:20px; padding:15px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+                    <h5 style="margin-top:0; color:#334155; font-size:0.95rem;">Understanding x and y in Hash Properties:</h5>
+                    <p style="margin:0 0 10px 0; font-size:0.9rem; color:#4b5563;">
+                        • <strong>x</strong> represents any original input message (e.g., "Hello World")<br>
+                        • <strong>y</strong> represents any different message an attacker might try to substitute<br>
+                        • <strong>h</strong> is the hash value (e.g., 512-bit fingerprint)<br>
+                        • The goal is to make it practically impossible to find y that produces same h as x
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    // Inject styles for this specific section
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .req-card { 
+            background: #fff; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; 
+            display: flex; gap: 12px; align-items: flex-start;
+        }
+        .req-num {
+            background: #e0f2fe; color: #0284c7; width: 24px; height: 24px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; font-size: 0.8rem; flex-shrink: 0;
+        }
+        .req-text { font-size: 0.85rem; color: #334155; line-height: 1.4; }
+    `;
+    document.head.appendChild(style);
+
+    appendContent(html);
+}
+
+// Logic for the Block Visualizer
+window.updateBlockViz = function(val) {
+    const msgDiv = document.getElementById('viz-msg');
+    const padDiv = document.getElementById('viz-pad');
+    const bitCountSpan = document.getElementById('bit-count');
+    
+    // Calculate bits (assuming UTF-8: 8 bits per character)
+    const bitCount = val.length * 8;
+    
+    // Simulate visual width (max 85% to save room for Length block)
+    let width = Math.min(val.length * 2, 85); 
+    
+    msgDiv.style.width = width + '%';
+    msgDiv.innerText = val.length > 0 ? "M" : "";
+    
+    // Update bit count display
+    bitCountSpan.textContent = `${bitCount} bits`;
+    bitCountSpan.style.fontWeight = 'bold';
+    bitCountSpan.style.color = bitCount > 896 ? '#ef4444' : '#10b981';
+    
+    // If text is very long, padding shrinks visual
+    if (bitCount > 896) { // 1024 - 128 (length field)
+        padDiv.innerText = "No Room!";
+        padDiv.style.background = '#fca5a5';
+        msgDiv.style.background = '#fca5a5';
+        
+        // Show warning about multiple blocks
+        if (!document.getElementById('multi-block-warning')) {
+            const warning = document.createElement('div');
+            warning.id = 'multi-block-warning';
+            warning.style.marginTop = '10px';
+            warning.style.padding = '10px';
+            warning.style.background = '#fef3c7';
+            warning.style.borderRadius = '6px';
+            warning.style.borderLeft = '3px solid #d97706';
+            warning.style.fontSize = '0.8rem';
+            warning.style.color = '#92400e';
+            warning.innerHTML = '<strong>Note:</strong> Message exceeds single block capacity. SHA-512 processes multiple 1024-bit blocks sequentially.';
+            
+            padDiv.parentElement.parentElement.appendChild(warning);
+        }
+    } else {
+        padDiv.innerText = width > 70 ? "Padding" : "Padding (100...0)";
+        padDiv.style.background = '#94a3b8';
+        msgDiv.style.background = '#3b82f6';
+        
+        const warning = document.getElementById('multi-block-warning');
+        if (warning) warning.remove();
+    }
 }
