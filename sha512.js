@@ -221,6 +221,7 @@ function renderSHA512(container) {
     
     // Add the Hash Introduction section after the main content
     addHashIntro();
+    addAvalancheEffect();
 }
 
 // --- LOGIC ENGINE ---
@@ -362,7 +363,7 @@ function addHashIntro() {
                 </p>
                 <p style="margin:10px 0 0 0; color:#4b5563; font-size:0.95rem;">
                     A hash function <strong>H</strong> accepts a variable-length block of data <strong>M</strong> 
-                    as input and produces a fixed-size hash value <strong>h</strong> (e.g., 512 bits for SHA-512).
+                    as input and produces a fixed-size hash value or hash code or message digest <strong>h</strong> (e.g., 512 bits for SHA-512).
                 </p>
             </div>
 
@@ -525,4 +526,298 @@ window.updateBlockViz = function(val) {
         const warning = document.getElementById('multi-block-warning');
         if (warning) warning.remove();
     }
+}// NEW SECTION: AVALANCHE EFFECT
+function addAvalancheEffect() {
+    const html = `
+        <div class="viz-section" style="margin-top: 40px; border-top: 2px solid #f1f5f9; padding-top: 40px;">
+            
+            <div class="module-header">
+                <div class="module-title" style="color:#334155;">
+                    <i data-feather="zap" style="color:#f59e0b;"></i> Avalanche Effect
+                </div>
+                <div class="module-subtitle">
+                    A small change in the input should produce a completely different hash output.
+                </div>
+            </div>
+
+            <div style="background: #fff7ed; border-left: 4px solid #f97316; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+                <p style="margin:0; color:#ea580c; font-size:0.95rem;">
+                    <strong>Definition:</strong> A message digest depends on all the bits in the input message.
+                    Any alteration of the input message during transmission would cause its message digest to 
+                    not match with its original message digest. This can be used to check for forgeries, 
+                    unauthorized alterations, etc.
+                </p>
+            </div>
+
+            <div style="background:white; border:1px solid #e2e8f0; border-radius:12px; padding:25px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom:30px;">
+                <h4 style="margin-top:0; margin-bottom:20px;">Interactive Example: See the Avalanche in Action</h4>
+                
+                <!-- Original Message -->
+                <div style="margin-bottom:30px;">
+                    <h5 style="color:#334155; margin-bottom:10px; font-size:1rem;">Original Message:</h5>
+                    <div id="original-msg" style="background:#f0f9ff; border:2px solid #0ea5e9; padding:15px; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:#0369a1;">
+                        "The quick brown fox jumps over the lazy dog"
+                    </div>
+                    <div style="margin-top:15px;">
+                        <button onclick="calculateAvalancheExample('original')" class="avalanche-btn" style="background:#3b82f6; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:600; font-size:0.9rem;">
+                            <i data-feather="hash" style="width:16px; height:16px; margin-right:8px;"></i> Calculate SHA-256 Hash
+                        </button>
+                    </div>
+                    <div id="original-hash" style="margin-top:15px; padding:15px; background:#f8fafc; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#64748b; display:none;">
+                        <strong>Hash:</strong> <span style="word-break:break-all;"></span>
+                    </div>
+                </div>
+
+                <!-- Changed Message -->
+                <div style="margin-bottom:30px;">
+                    <h5 style="color:#334155; margin-bottom:10px; font-size:1rem;">Altered Message (Added 's'):</h5>
+                    <div id="altered-msg" style="background:#fef2f2; border:2px solid #ef4444; padding:15px; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:0.9rem; color:#dc2626; position:relative;">
+                        "The quick brown fox jumps over the lazy dog<span style="color:#ef4444; font-weight:bold;">s</span>"
+                        <div style="position:absolute; top:-10px; right:-10px; background:#ef4444; color:white; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:0.8rem;">
+                            +s
+                        </div>
+                    </div>
+                    <div style="margin-top:15px;">
+                        <button onclick="calculateAvalancheExample('altered')" class="avalanche-btn" style="background:#ef4444; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:600; font-size:0.9rem;">
+                            <i data-feather="hash" style="width:16px; height:16px; margin-right:8px;"></i> Calculate SHA-256 Hash
+                        </button>
+                    </div>
+                    <div id="altered-hash" style="margin-top:15px; padding:15px; background:#f8fafc; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:#64748b; display:none;">
+                        <strong>Hash:</strong> <span style="word-break:break-all;"></span>
+                    </div>
+                </div>
+
+                <!-- Comparison Visual -->
+                <div id="comparison-visual" style="display:none;">
+                    <h5 style="color:#334155; margin-bottom:15px; font-size:1rem;">Comparison Visualization:</h5>
+                    
+                    <!-- Hash Bars -->
+                    <div style="margin-bottom:20px;">
+                        <div style="display:flex; align-items:center; margin-bottom:10px;">
+                            <div style="width:100px; font-size:0.85rem; color:#64748b;">Original Hash:</div>
+                            <div id="original-hash-bar" style="flex:1; height:30px; background:#3b82f6; border-radius:4px; position:relative;"></div>
+                        </div>
+                        <div style="display:flex; align-items:center;">
+                            <div style="width:100px; font-size:0.85rem; color:#64748b;">Altered Hash:</div>
+                            <div id="altered-hash-bar" style="flex:1; height:30px; background:#ef4444; border-radius:4px; position:relative;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bit Comparison -->
+                    <div style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <div style="font-size:2rem; color:#ef4444; font-weight:bold;" id="diff-percentage">0%</div>
+                            <div style="font-size:0.9rem; color:#64748b;">of bits are different</div>
+                        </div>
+                        
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px;">
+                            <div style="text-align:center;">
+                                <div style="font-size:0.8rem; color:#64748b; margin-bottom:5px;">Bits Changed</div>
+                                <div style="font-size:1.5rem; font-weight:bold; color:#ef4444;" id="bits-changed">0</div>
+                                <div style="font-size:0.7rem; color:#94a3b8;">out of 256 bits</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:0.8rem; color:#64748b; margin-bottom:5px;">Bits Same</div>
+                                <div style="font-size:1.5rem; font-weight:bold; color:#10b981;" id="bits-same">256</div>
+                                <div style="font-size:0.7rem; color:#94a3b8;">out of 256 bits</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conclusion Box -->
+                    <div id="avalanche-conclusion" style="margin-top:20px; padding:15px; border-radius:8px; display:none;">
+                        <h6 style="margin:0; font-size:0.9rem; display:flex; align-items:center; gap:8px;">
+                            <i data-feather="alert-circle" style="width:18px; height:18px;"></i>
+                            <span>Avalanche Effect Result</span>
+                        </h6>
+                        <p style="margin:10px 0 0 0; font-size:0.85rem;"></p>
+                    </div>
+                </div>
+
+                <!-- Interactive Controls -->
+                <div style="margin-top:30px; text-align:center;">
+                    <button onclick="compareAvalanche()" id="compare-btn" style="background:#8b5cf6; color:white; border:none; padding:12px 30px; border-radius:6px; cursor:pointer; font-weight:600; font-size:0.9rem; display:none;">
+                        <i data-feather="git-compare" style="width:16px; height:16px; margin-right:8px;"></i> Compare Hashes
+                    </button>
+                    <button onclick="resetAvalanche()" id="reset-btn" style="background:#64748b; color:white; border:none; padding:12px 30px; border-radius:6px; cursor:pointer; font-weight:600; font-size:0.9rem; margin-left:10px; display:none;">
+                        <i data-feather="refresh-ccw" style="width:16px; height:16px; margin-right:8px;"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Information Panel -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:30px;">
+                <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:20px; border-radius:8px;">
+                    <h5 style="margin-top:0; color:#166534; font-size:0.95rem; display:flex; align-items:center; gap:8px;">
+                        <i data-feather="check-circle" style="color:#22c55e; width:18px; height:18px;"></i>
+                        <span>Why This Matters</span>
+                    </h5>
+                    <ul style="margin:10px 0 0 0; padding-left:20px; font-size:0.85rem; color:#166534;">
+                        <li>Detects even single-bit changes in data</li>
+                        <li>Prevents undetected message tampering</li>
+                        <li>Ensures data integrity verification</li>
+                        <li>Makes hash functions cryptographically secure</li>
+                    </ul>
+                </div>
+                
+                <div style="background:#fef3c7; border:1px solid #fcd34d; padding:20px; border-radius:8px;">
+                    <h5 style="margin-top:0; color:#92400e; font-size:0.95rem; display:flex; align-items:center; gap:8px;">
+                        <i data-feather="alert-triangle" style="color:#f59e0b; width:18px; height:18px;"></i>
+                        <span>Real-World Application</span>
+                    </h5>
+                    <ul style="margin:10px 0 0 0; padding-left:20px; font-size:0.85rem; color:#92400e;">
+                        <li>File integrity checking (download verification)</li>
+                        <li>Digital signatures (detect document changes)</li>
+                        <li>Password storage (different hash for similar passwords)</li>
+                        <li>Blockchain (ensures transaction immutability)</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    // Inject styles
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .avalanche-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.2s; }
+        .avalanche-btn:active { transform: translateY(0); }
+    `;
+    document.head.appendChild(style);
+
+    appendContent(html);
+    feather.replace();
+}
+
+// Avalanche Effect Logic
+window.calculateAvalancheExample = function(type) {
+    const messages = {
+        original: "The quick brown fox jumps over the lazy dog",
+        altered: "The quick brown fox jumps over the lazy dogs"
+    };
+    
+    // Real SHA-256 hashes for the examples
+    const hashes = {
+        original: "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592",
+        altered: "ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c"
+    };
+    
+    const hashDiv = document.getElementById(`${type}-hash`);
+    const hashSpan = hashDiv.querySelector('span');
+    const button = event.target;
+    
+    // Show hash
+    hashDiv.style.display = 'block';
+    hashSpan.textContent = hashes[type];
+    
+    // Update button
+    button.innerHTML = '<i data-feather="check" style="width:16px; height:16px; margin-right:8px;"></i> Hash Calculated';
+    button.style.background = type === 'original' ? '#10b981' : '#ef4444';
+    button.disabled = true;
+    
+    // Show compare button if both hashes are calculated
+    const originalDone = document.getElementById('original-hash').style.display === 'block';
+    const alteredDone = document.getElementById('altered-hash').style.display === 'block';
+    
+    if (originalDone && alteredDone) {
+        document.getElementById('compare-btn').style.display = 'inline-block';
+        document.getElementById('reset-btn').style.display = 'inline-block';
+    }
+    
+    feather.replace();
+};
+
+window.compareAvalanche = function() {
+    const comparisonDiv = document.getElementById('comparison-visual');
+    const conclusionDiv = document.getElementById('avalanche-conclusion');
+    
+    // Show comparison
+    comparisonDiv.style.display = 'block';
+    
+    // Get hashes
+    const originalHash = "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592";
+    const alteredHash = "ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c";
+    
+    // Convert hex to binary for visualization
+    const originalBinary = hexToBinary(originalHash);
+    const alteredBinary = hexToBinary(alteredHash);
+    
+    // Calculate differences
+    let diffCount = 0;
+    for (let i = 0; i < originalBinary.length; i++) {
+        if (originalBinary[i] !== alteredBinary[i]) {
+            diffCount++;
+        }
+    }
+    
+    const totalBits = 256;
+    const sameCount = totalBits - diffCount;
+    const diffPercentage = Math.round((diffCount / totalBits) * 100);
+    
+    // Update display
+    document.getElementById('diff-percentage').textContent = `${diffPercentage}%`;
+    document.getElementById('bits-changed').textContent = diffCount;
+    document.getElementById('bits-same').textContent = sameCount;
+    
+    // Animate the bars
+    const originalBar = document.getElementById('original-hash-bar');
+    const alteredBar = document.getElementById('altered-hash-bar');
+    
+    originalBar.style.width = '0%';
+    alteredBar.style.width = '0%';
+    
+    setTimeout(() => {
+        originalBar.style.transition = 'width 1.5s ease';
+        alteredBar.style.transition = 'width 1.5s ease';
+        originalBar.style.width = '100%';
+        alteredBar.style.width = '100%';
+    }, 100);
+    
+    // Show conclusion
+    setTimeout(() => {
+        conclusionDiv.style.display = 'block';
+        conclusionDiv.style.background = diffPercentage > 40 ? '#fef2f2' : '#f0fdf4';
+        conclusionDiv.style.border = diffPercentage > 40 ? '1px solid #fecaca' : '1px solid #bbf7d0';
+        
+        const conclusionText = conclusionDiv.querySelector('p');
+        if (diffPercentage > 40) {
+            conclusionText.innerHTML = `<strong style="color:#dc2626;">✅ STRONG AVALANCHE EFFECT:</strong> Changing just 1 character ('s') altered <strong>${diffPercentage}% of bits</strong> (${diffCount}/256 bits)! This makes hash functions excellent for detecting tampering.`;
+        } else {
+            conclusionText.innerHTML = `<strong style="color:#16a34a;">⚠️ WEAK AVALANCHE EFFECT:</strong> Only ${diffPercentage}% of bits changed. This would make the hash vulnerable to certain attacks.`;
+        }
+    }, 2000);
+    
+    feather.replace();
+};
+
+window.resetAvalanche = function() {
+    // Reset all elements
+    ['original', 'altered'].forEach(type => {
+        const hashDiv = document.getElementById(`${type}-hash`);
+        hashDiv.style.display = 'none';
+        
+        const button = document.querySelector(`button[onclick="calculateAvalancheExample('${type}')"]`);
+        if (button) {
+            button.innerHTML = '<i data-feather="hash" style="width:16px; height:16px; margin-right:8px;"></i> Calculate SHA-256 Hash';
+            button.style.background = type === 'original' ? '#3b82f6' : '#ef4444';
+            button.disabled = false;
+        }
+    });
+    
+    document.getElementById('comparison-visual').style.display = 'none';
+    document.getElementById('compare-btn').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'none';
+    document.getElementById('avalanche-conclusion').style.display = 'none';
+    
+    feather.replace();
+};
+
+// Helper function to convert hex to binary
+function hexToBinary(hex) {
+    let binary = '';
+    for (let i = 0; i < hex.length; i++) {
+        const bits = parseInt(hex[i], 16).toString(2).padStart(4, '0');
+        binary += bits;
+    }
+    return binary;
 }
