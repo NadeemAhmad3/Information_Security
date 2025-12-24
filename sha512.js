@@ -223,7 +223,10 @@ function renderSHA512(container) {
     addHashIntro();
     addAvalancheEffect();
     addHashAttacksSection(); 
-    addSHA512Implementation();
+    addSHA512PropertiesAndProcess();
+    addSHA512FAQSection();
+    addCompressionFunctionVisualization();
+    addLogicalFunctionsInsight();
 }
 
 // --- LOGIC ENGINE ---
@@ -1442,17 +1445,17 @@ function generateRandomHash() {
     }
     return result + '...';
 }
-// COMPREHENSIVE SHA-512 MODULE
-function addSHA512Implementation() {
+// NEW SECTION: SHA-512 PROPERTIES AND ITERATIVE PROCESS
+function addSHA512PropertiesAndProcess() {
     const html = `
         <div class="viz-section" style="margin-top: 40px; border-top: 2px solid #f1f5f9; padding-top: 40px;">
             
             <div class="module-header">
                 <div class="module-title" style="color:#334155;">
-                    <i data-feather="hash" style="color:#3b82f6;"></i> SHA-512: Complete Implementation
+                    <i data-feather="cpu" style="color:#3b82f6;"></i> SHA-512: Algorithm Properties & Iterative Process
                 </div>
                 <div class="module-subtitle">
-                    A detailed visualization of the Secure Hash Algorithm 512-bit (SHA-512)
+                    Understanding the technical specifications and step-by-step processing of SHA-512.
                 </div>
             </div>
 
@@ -1465,8 +1468,8 @@ function addSHA512Implementation() {
                         <div style="font-size: 1.2rem; font-weight: bold; color: #1e40af;">512 bits (64 bytes)</div>
                     </div>
                     <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #10b981;">
-                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Message Size</div>
-                        <div style="font-size: 1.2rem; font-weight: bold; color: #047857;">≤ 2¹²⁸ bits</div>
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Maximum Message Size</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #047857;">2¹²⁸ - 1 bits</div>
                     </div>
                     <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #f59e0b;">
                         <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Block Size</div>
@@ -1477,583 +1480,332 @@ function addSHA512Implementation() {
                         <div style="font-size: 1.2rem; font-weight: bold; color: #5b21b6;">64 bits</div>
                     </div>
                     <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #ef4444;">
-                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Number of Steps</div>
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Number of Rounds</div>
                         <div style="font-size: 1.2rem; font-weight: bold; color: #b91c1c;">80 rounds</div>
                     </div>
                     <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #06b6d4;">
                         <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Security Level</div>
-                        <div style="font-size: 1.2rem; font-weight: bold; color: #0e7490;">256 bits (collision)</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #0e7490;">256 bits (collision resistance)</div>
                     </div>
                 </div>
             </div>
 
-            <!-- SHA-512 Logic Overview -->
+            <!-- Iterative Process Visualization -->
             <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h4 style="margin: 0; color:#334155; font-size: 1.1rem;">SHA-512 Logic Overview</h4>
-                    <div style="font-size: 0.8rem; color: #64748b; background: #f8fafc; padding: 5px 10px; border-radius: 4px;">
-                        NATIONAL UNIVERSITY OF COMPUTER & EMERGING SCIENCES
-                    </div>
-                </div>
-
-                <!-- Process Flow Visualization -->
-                <div style="position: relative; padding: 20px; background: #f8fafc; border-radius: 8px; margin-bottom: 25px;">
-                    
-                    <!-- Input Message -->
-                    <div style="text-align: center; margin-bottom: 30px; position: relative;">
-                        <div style="background: #3b82f6; color: white; padding: 15px; border-radius: 8px; display: inline-block; position: relative;">
-                            <div style="font-weight: bold; font-size: 1rem;">INPUT MESSAGE</div>
-                            <div style="font-size: 0.85rem; opacity: 0.9;">(Any length)</div>
-                            <div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); color: #64748b; font-size: 0.75rem;">Step 0</div>
-                        </div>
-                        <div style="position: absolute; top: 50%; right: -30px; transform: translateY(-50%); color: #94a3b8; font-size: 1.5rem;">↓</div>
-                    </div>
-
-                    <!-- Steps Container -->
-                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px;">
-                        <!-- Step 1 -->
-                        <div style="text-align: center;">
-                            <div style="background: #0ea5e9; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">1</div>
-                            <div style="font-size: 0.9rem; font-weight: 600; color: #0c4a6e; margin-bottom: 5px;">Append Padding</div>
-                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
-                                Add '1', then zeros,<br>then 128-bit length
-                            </div>
-                        </div>
-
-                        <!-- Step 2 -->
-                        <div style="text-align: center;">
-                            <div style="background: #10b981; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">2</div>
-                            <div style="font-size: 0.9rem; font-weight: 600; color: #047857; margin-bottom: 5px;">Append Length</div>
-                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
-                                128-bit representation<br>of original length L
-                            </div>
-                        </div>
-
-                        <!-- Step 3 -->
-                        <div style="text-align: center;">
-                            <div style="background: #f59e0b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">3</div>
-                            <div style="font-size: 0.9rem; font-weight: 600; color: #b45309; margin-bottom: 5px;">Initialize Hash Buffer</div>
-                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
-                                8 × 64-bit initial<br>hash values (H₀)
-                            </div>
-                        </div>
-
-                        <!-- Step 4 -->
-                        <div style="text-align: center;">
-                            <div style="background: #8b5cf6; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">4</div>
-                            <div style="font-size: 0.9rem; font-weight: 600; color: #5b21b6; margin-bottom: 5px;">Process Blocks</div>
-                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
-                                80 rounds per<br>1024-bit block
-                            </div>
-                        </div>
-
-                        <!-- Step 5 -->
-                        <div style="text-align: center;">
-                            <div style="background: #ef4444; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">5</div>
-                            <div style="font-size: 0.9rem; font-weight: 600; color: #b91c1c; margin-bottom: 5px;">Output</div>
-                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
-                                512-bit final<br>hash value
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Final Output -->
-                    <div style="text-align: center;">
-                        <div style="background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 15px; border-radius: 8px; display: inline-block;">
-                            <div style="font-weight: bold; font-size: 1rem;">FINAL HASH OUTPUT</div>
-                            <div style="font-size: 0.85rem; opacity: 0.9;">512 bits / 64 bytes</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Interactive SHA-512 Implementation -->
-            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
-                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Interactive SHA-512 Implementation</h4>
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">SHA-512 Iterative Process Flow</h4>
                 
-                <!-- Input Area -->
-                <div style="margin-bottom: 25px;">
-                    <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 10px; font-size: 0.9rem;">Input Message:</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" id="sha-input" placeholder="Enter message to hash..." 
-                               style="flex: 1; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: 'JetBrains Mono'; outline: none; transition: border 0.2s;">
-                        <button onclick="calculateSHA512()" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                            <i data-feather="hash"></i> Compute SHA-512
-                        </button>
-                        <button onclick="resetSHA512()" style="background: #64748b; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                            <i data-feather="refresh-ccw"></i> Reset
-                        </button>
-                    </div>
+                <!-- Flow Diagram -->
+                <div style="position: relative; padding: 20px; background: #f8fafc; border-radius: 12px; margin-bottom: 25px;">
                     
-                    <!-- Predefined Examples -->
-                    <div style="margin-top: 15px;">
-                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 8px;">Try these examples:</div>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button onclick="setExample('The quick brown fox jumps over the lazy dog')" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
-                                "The quick brown fox jumps over the lazy dog"
-                            </button>
-                            <button onclick="setExample('Hello World')" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
-                                "Hello World"
-                            </button>
-                            <button onclick="setExample('abc')" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
-                                "abc"
-                            </button>
-                            <button onclick="setExample('')" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
-                                Empty String
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Output Area -->
-                <div id="sha-output" style="display: none;">
-                    <div style="background: #f8fafc; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h5 style="margin: 0; color: #334155; font-size: 1rem;">SHA-512 Hash Result</h5>
-                            <div style="font-size: 0.8rem; color: #64748b; background: white; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
-                                <span id="hash-length">0</span> characters
+                    <!-- Top Section: Preprocessing -->
+                    <div style="text-align: center; margin-bottom: 40px; position: relative;">
+                        <div style="display: inline-block; position: relative;">
+                            <div style="background: #3b82f6; color: white; padding: 15px; border-radius: 8px; width: 180px; margin-bottom: 10px;">
+                                <div style="font-weight: bold; font-size: 0.9rem;">INPUT MESSAGE</div>
+                                <div style="font-size: 0.7rem; opacity: 0.9;">Length = L bits</div>
+                            </div>
+                            <div style="position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); color: #64748b; font-size: 0.7rem; white-space: nowrap;">
+                                Original message of length L
                             </div>
                         </div>
-                        <div id="hash-result" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: white; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; word-break: break-all; color: #334155;">
-                            <!-- Hash will appear here -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Process Visualization Tabs -->
-                <div style="margin-top: 25px;">
-                    <div style="display: flex; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px;">
-                        <button onclick="showProcessTab('padding')" class="process-tab active" style="padding: 12px 20px; background: none; border: none; border-bottom: 2px solid #3b82f6; color: #3b82f6; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
-                            Padding
-                        </button>
-                        <button onclick="showProcessTab('expansion')" class="process-tab" style="padding: 12px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: #64748b; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
-                            Message Expansion
-                        </button>
-                        <button onclick="showProcessTab('compression')" class="process-tab" style="padding: 12px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: #64748b; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
-                            Compression
-                        </button>
-                        <button onclick="showProcessTab('rounds')" class="process-tab" style="padding: 12px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: #64748b; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
-                            80 Rounds
-                        </button>
-                    </div>
-
-                    <!-- Process Panels -->
-                    <div id="process-panels">
                         
-                        <!-- Padding Panel (Default) -->
-                        <div id="padding-panel" class="process-panel">
-                            <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Step 1: Message Padding</h5>
-                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
-                                The message is padded to make its length congruent to 896 modulo 1024.
-                            </p>
-                            
-                            <div style="background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #0369a1; margin-bottom: 15px;">
-                                    Padding Formula: Message + '1' + k×'0' + 128-bit_length
-                                </div>
-                                
-                                <!-- Padding Visualization -->
-                                <div id="padding-visual" style="display: none;">
-                                    <div style="display: flex; height: 50px; width: 100%; border: 2px solid #334155; border-radius: 6px; overflow: hidden; font-family: monospace; font-weight: bold; color: white; margin-bottom: 10px;">
-                                        <div id="pad-msg" style="background: #3b82f6; display: flex; align-items: center; justify-content: center; min-width: 60px;">M</div>
-                                        <div id="pad-one" style="background: #ef4444; display: flex; align-items: center; justify-content: center; min-width: 20px; border-left: 1px solid white;">1</div>
-                                        <div id="pad-zeros" style="flex: 1; background: #94a3b8; display: flex; align-items: center; justify-content: center; border-left: 1px solid white;">0...0</div>
-                                        <div id="pad-length" style="width: 25%; background: #10b981; display: flex; align-items: center; justify-content: center; border-left: 1px solid white;">L</div>
+                        <!-- Arrow Down -->
+                        <div style="position: absolute; top: 80px; left: 50%; transform: translateX(-50%); color: #94a3b8; font-size: 1.5rem;">↓</div>
+                        
+                        <!-- Padding Process -->
+                        <div style="margin-top: 50px;">
+                            <div style="background: #10b981; color: white; padding: 15px; border-radius: 8px; width: 220px; display: inline-block; position: relative;">
+                                <div style="font-weight: bold; font-size: 0.9rem;">PREPROCESSING & PADDING</div>
+                                <div style="font-size: 0.7rem; opacity: 0.9;">Add '1' + k×'0' + 128-bit length</div>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">
+                                Total length becomes N × 1024 bits
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Section: Segmentation -->
+                    <div style="text-align: center; margin-bottom: 40px; background: #f0f9ff; padding: 20px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <h5 style="margin-top: 0; color: #0369a1; margin-bottom: 15px; font-size: 1rem;">Segmentation into N Blocks</h5>
+                        
+                        <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                            <div style="background: #3b82f6; color: white; padding: 12px; border-radius: 6px; width: 100px; text-align: center;">
+                                <div style="font-weight: bold; font-size: 0.8rem;">M₁</div>
+                                <div style="font-size: 0.6rem;">1024 bits</div>
+                            </div>
+                            <div style="background: #3b82f6; color: white; padding: 12px; border-radius: 6px; width: 100px; text-align: center;">
+                                <div style="font-weight: bold; font-size: 0.8rem;">M₂</div>
+                                <div style="font-size: 0.6rem;">1024 bits</div>
+                            </div>
+                            <div style="background: #94a3b8; color: white; padding: 12px; border-radius: 6px; width: 100px; text-align: center;">
+                                <div style="font-weight: bold; font-size: 0.8rem;">⋯</div>
+                                <div style="font-size: 0.6rem;">⋯</div>
+                            </div>
+                            <div style="background: #3b82f6; color: white; padding: 12px; border-radius: 6px; width: 100px; text-align: center;">
+                                <div style="font-weight: bold; font-size: 0.8rem;">Mₙ</div>
+                                <div style="font-size: 0.6rem;">1024 bits</div>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 0.8rem; color: #64748b;">
+                            Padded message divided into N equal segments of 1024 bits each
+                        </div>
+                    </div>
+
+                    <!-- Bottom Section: Iterative Computation -->
+                    <div>
+                        <h5 style="text-align: center; color: #334155; margin-bottom: 20px; font-size: 1rem;">Iterative Hash Computation (Merkle-Damgård Construction)</h5>
+                        
+                        <!-- Initialization Vector -->
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <div style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; padding: 15px; border-radius: 8px; width: 200px; display: inline-block;">
+                                <div style="font-weight: bold; font-size: 0.9rem;">INITIALIZATION VECTOR (IV)</div>
+                                <div style="font-size: 0.7rem; opacity: 0.9;">H₀ = Fixed 512-bit constant</div>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">
+                                Starting 512-bit constant value
+                            </div>
+                        </div>
+
+                        <!-- Block Processing Visualization -->
+                        <div id="block-process-visual" style="max-width: 800px; margin: 0 auto;">
+                            <!-- Block 1 Processing -->
+                            <div class="block-process" style="margin-bottom: 40px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                                    <div style="text-align: center;">
+                                        <div style="background: #10b981; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">H₀</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Initial Hash</div>
+                                        </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; color: #64748b;">512 bits</div>
                                     </div>
                                     
-                                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; font-family: 'JetBrains Mono';">
-                                        <div>Message (M)</div>
-                                        <div>Single '1' bit</div>
-                                        <div>k zeros</div>
-                                        <div>128-bit length</div>
+                                    <div style="font-size: 1.2rem; color: #64748b; margin: 0 15px;">+</div>
+                                    
+                                    <div style="text-align: center;">
+                                        <div style="background: #3b82f6; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">M₁</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Message Block 1</div>
+                                        </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; color: #64748b;">1024 bits</div>
                                     </div>
                                     
-                                    <div style="margin-top: 15px; font-size: 0.85rem; color: #334155;">
-                                        <div>Total Length: <span id="total-length">0</span> bits (must be multiple of 1024)</div>
-                                        <div>Number of Blocks: <span id="block-count">0</span></div>
+                                    <div style="font-size: 1.2rem; color: #64748b; margin: 0 15px;">→</div>
+                                    
+                                    <div style="position: relative;">
+                                        <div style="background: #f59e0b; color: white; padding: 20px; border-radius: 8px; width: 160px; text-align: center;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">COMPRESSION</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Function F</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="font-size: 1.2rem; color: #64748b; margin: 0 15px;">→</div>
+                                    
+                                    <div style="text-align: center;">
+                                        <div style="background: #ef4444; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">H₁</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Hash after Block 1</div>
+                                        </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; color: #64748b;">512 bits</div>
                                     </div>
                                 </div>
                                 
-                                <div id="padding-info" style="text-align: center; color: #64748b; font-size: 0.9rem; padding: 20px;">
-                                    Enter a message above to see padding visualization
+                                <div style="text-align: center; font-size: 0.8rem; color: #64748b;">
+                                    <strong>First Block:</strong> H₁ = H₀ + F(M₁, H₀)
                                 </div>
                             </div>
-                            
-                            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 6px;">
-                                <h6 style="margin: 0 0 10px 0; color: #92400e; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
-                                    <i data-feather="info" style="width: 16px; height: 16px;"></i>
-                                    Key Points
-                                </h6>
-                                <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: #92400e;">
-                                    <li>Always add a single '1' bit after the message</li>
-                                    <li>Add minimum number of '0' bits to reach (length mod 1024) = 896</li>
-                                    <li>Finally, append original message length as 128-bit binary</li>
-                                    <li>Final padded length is multiple of 1024 bits</li>
-                                </ul>
-                            </div>
-                        </div>
 
-                        <!-- Message Expansion Panel -->
-                        <div id="expansion-panel" class="process-panel" style="display: none;">
-                            <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Step 2: Message Schedule (W) Expansion</h5>
-                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
-                                Each 1024-bit block is expanded into 80 words (W[0] to W[79]) for the 80 rounds.
-                            </p>
-                            
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                                <!-- Initial 16 Words -->
-                                <div style="margin-bottom: 25px;">
-                                    <h6 style="color: #334155; margin-bottom: 10px; font-size: 0.9rem;">Initial 16 Words (W[0] to W[15]):</h6>
-                                    <div id="initial-words" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-bottom: 15px;">
-                                        <!-- Generated dynamically -->
+                            <!-- Block 2 Processing -->
+                            <div class="block-process" style="margin-bottom: 40px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                                    <div style="text-align: center;">
+                                        <div style="background: #ef4444; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">H₁</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Hash from Block 1</div>
+                                        </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; color: #64748b;">512 bits</div>
                                     </div>
-                                    <div style="font-size: 0.8rem; color: #64748b; text-align: center;">
-                                        Direct from message block (16 × 64-bit = 1024 bits)
+                                    
+                                    <div style="font-size: 1.2rem; color: #64748b; margin: 0 15px;">+</div>
+                                    
+                                    <div style="text-align: center;">
+                                        <div style="background: #3b82f6; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">M₂</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Message Block 2</div>
+                                        </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; color: #64748b;">1024 bits</div>
+                                    </div>
+                                    
+                                    <div style="font-size: 1.2rem; color: #64748b; margin: 0 15px;">→</div>
+                                    
+                                    <div style="position: relative;">
+                                        <div style="background: #f59e0b; color: white; padding: 20px; border-radius: 8px; width: 160px; text-align: center;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">COMPRESSION</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Function F</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="font-size: 1.2rem; color: #64748b; margin: 0 15px;">→</div>
+                                    
+                                    <div style="text-align: center;">
+                                        <div style="background: #8b5cf6; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">H₂</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Hash after Block 2</div>
+                                        </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; color: #64748b;">512 bits</div>
                                     </div>
                                 </div>
                                 
-                                <!-- Expansion Formula -->
-                                <div style="background: white; border: 2px solid #3b82f6; border-radius: 6px; padding: 15px; margin-bottom: 20px;">
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #1e40af; text-align: center; margin-bottom: 10px;">
-                                        W[t] = σ₁(W[t-2]) + W[t-7] + σ₀(W[t-15]) + W[t-16]
-                                    </div>
-                                    <div style="display: flex; justify-content: space-around; font-size: 0.8rem; color: #64748b;">
-                                        <div style="text-align: center;">
-                                            <div>σ₀(x) = ROTR¹(x) ⊕ ROTR⁸(x) ⊕ SHR⁷(x)</div>
-                                        </div>
-                                        <div style="text-align: center;">
-                                            <div>σ₁(x) = ROTR¹⁹(x) ⊕ ROTR⁶¹(x) ⊕ SHR⁶(x)</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Generated Words -->
-                                <div>
-                                    <h6 style="color: #334155; margin-bottom: 10px; font-size: 0.9rem;">Generated Words (W[16] to W[79]):</h6>
-                                    <div id="generated-words" style="max-height: 200px; overflow-y: auto; padding: 10px; background: white; border: 1px solid #e2e8f0; border-radius: 6px;">
-                                        <!-- Generated dynamically -->
-                                    </div>
+                                <div style="text-align: center; font-size: 0.8rem; color: #64748b;">
+                                    <strong>Second Block:</strong> H₂ = H₁ + F(M₂, H₁)
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Compression Panel -->
-                        <div id="compression-panel" class="process-panel" style="display: none;">
-                            <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Step 3: Compression Function</h5>
-                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
-                                The core of SHA-512 that processes each block through 80 rounds.
-                            </p>
-                            
-                            <!-- Compression Visualization -->
-                            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; position: relative;">
-                                
-                                <!-- Previous Hash -->
-                                <div style="text-align: center; margin-right: 30px;">
-                                    <div style="background: #10b981; color: white; padding: 15px; border-radius: 8px; width: 140px;">
-                                        <div style="font-weight: bold; font-size: 0.9rem;">Hᵢ₋₁</div>
-                                        <div style="font-size: 0.75rem; opacity: 0.9;">Previous Hash</div>
+                            <!-- Final Block Processing -->
+                            <div class="block-process" style="padding: 20px; background: linear-gradient(135deg, #1e40af, #3b82f6); border-radius: 12px; color: white;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                                    <div style="text-align: center;">
+                                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">Hₙ₋₁</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Previous Hash</div>
+                                        </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; opacity: 0.8;">512 bits</div>
                                     </div>
-                                    <div style="margin-top: 10px; font-size: 0.7rem; color: #64748b;">512 bits</div>
-                                </div>
-                                
-                                <!-- Plus Sign -->
-                                <div style="font-size: 2rem; color: #64748b; margin-right: 30px;">+</div>
-                                
-                                <!-- Compression Function -->
-                                <div style="position: relative;">
-                                    <div style="background: linear-gradient(135deg, #f59e0b, #f97316); color: white; padding: 20px; border-radius: 8px; width: 180px; text-align: center; position: relative; z-index: 2;">
-                                        <div style="font-weight: bold; font-size: 1rem;">F(Mᵢ, Hᵢ₋₁)</div>
-                                        <div style="font-size: 0.75rem; opacity: 0.9;">Compression Function</div>
+                                    
+                                    <div style="font-size: 1.2rem; margin: 0 15px;">+</div>
+                                    
+                                    <div style="text-align: center;">
+                                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">Mₙ</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Final Block</div>
+                                        </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; opacity: 0.8;">1024 bits</div>
                                     </div>
-                                    <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; background: rgba(245, 158, 11, 0.1); border: 2px dashed #f59e0b; border-radius: 12px; z-index: 1;"></div>
-                                </div>
-                                
-                                <!-- Arrow -->
-                                <div style="font-size: 2rem; color: #64748b; margin-left: 30px; margin-right: 30px;">=</div>
-                                
-                                <!-- New Hash -->
-                                <div style="text-align: center;">
-                                    <div style="background: #3b82f6; color: white; padding: 15px; border-radius: 8px; width: 140px;">
-                                        <div style="font-weight: bold; font-size: 0.9rem;">Hᵢ</div>
-                                        <div style="font-size: 0.75rem; opacity: 0.9;">New Hash</div>
-                                    </div>
-                                    <div style="margin-top: 10px; font-size: 0.7rem; color: #64748b;">512 bits</div>
-                                </div>
-                                
-                            </div>
-                            
-                            <!-- Message Input -->
-                            <div style="text-align: center; margin-top: 20px;">
-                                <div style="background: #8b5cf6; color: white; padding: 12px; border-radius: 8px; width: 200px; display: inline-block;">
-                                    <div style="font-weight: bold; font-size: 0.9rem;">Message Block Mᵢ</div>
-                                    <div style="font-size: 0.75rem; opacity: 0.9;">1024 bits</div>
-                                </div>
-                                <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">Input to Compression Function</div>
-                            </div>
-                            
-                            <!-- Working Variables -->
-                            <div style="margin-top: 30px;">
-                                <h6 style="color: #334155; margin-bottom: 15px; font-size: 0.9rem;">Working Variables (a through h):</h6>
-                                <div id="working-vars" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
-                                    <!-- Generated dynamically -->
-                                </div>
-                            </div>
-                            
-                            <!-- Functions Explanation -->
-                            <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 20px;">
-                                <h6 style="margin: 0 0 15px 0; color: #166534; font-size: 0.9rem;">Key Functions in Compression:</h6>
-                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                                    <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
-                                        <div style="font-weight: bold; color: #166534; margin-bottom: 8px; font-size: 0.85rem;">Ch(e, f, g)</div>
-                                        <div style="font-size: 0.8rem; color: #4b5563;">
-                                            Choose function: (e ∧ f) ⊕ (¬e ∧ g)<br>
-                                            Uses e to choose between f and g
+                                    
+                                    <div style="font-size: 1.2rem; margin: 0 15px;">→</div>
+                                    
+                                    <div style="position: relative;">
+                                        <div style="background: #f59e0b; padding: 20px; border-radius: 8px; width: 160px; text-align: center;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">COMPRESSION</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">Function F</div>
                                         </div>
                                     </div>
-                                    <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
-                                        <div style="font-weight: bold; color: #166534; margin-bottom: 8px; font-size: 0.85rem;">Maj(a, b, c)</div>
-                                        <div style="font-size: 0.8rem; color: #4b5563;">
-                                            Majority function: (a ∧ b) ⊕ (a ∧ c) ⊕ (b ∧ c)<br>
-                                            Outputs majority bit of a, b, c
+                                    
+                                    <div style="font-size: 1.2rem; margin: 0 15px;">→</div>
+                                    
+                                    <div style="text-align: center;">
+                                        <div style="background: #10b981; padding: 15px; border-radius: 8px; width: 140px;">
+                                            <div style="font-weight: bold; font-size: 0.9rem;">Hₙ</div>
+                                            <div style="font-size: 0.7rem; opacity: 0.9;">FINAL HASH</div>
                                         </div>
+                                        <div style="margin-top: 5px; font-size: 0.7rem; opacity: 0.8;">512 bits</div>
                                     </div>
-                                    <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
-                                        <div style="font-weight: bold; color: #166534; margin-bottom: 8px; font-size: 0.85rem;">Σ₀(a)</div>
-                                        <div style="font-size: 0.8rem; color: #4b5563;">
-                                            Σ₀(a) = ROTR²⁸(a) ⊕ ROTR³⁴(a) ⊕ ROTR³⁹(a)<br>
-                                            Complex rotation combination
-                                        </div>
-                                    </div>
-                                    <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
-                                        <div style="font-weight: bold; color: #166534; margin-bottom: 8px; font-size: 0.85rem;">Σ₁(e)</div>
-                                        <div style="font-size: 0.8rem; color: #4b5563;">
-                                            Σ₁(e) = ROTR¹⁴(e) ⊕ ROTR¹⁸(e) ⊕ ROTR⁴¹(e)<br>
-                                            Different rotation combination
-                                        </div>
-                                    </div>
+                                </div>
+                                
+                                <div style="text-align: center; font-size: 0.9rem; opacity: 0.9;">
+                                    <strong>Final Block:</strong> Hₙ = Hₙ₋₁ + F(Mₙ, Hₙ₋₁) = Final Hash Code
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- 80 Rounds Panel -->
-                        <div id="rounds-panel" class="process-panel" style="display: none;">
-                            <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Step 4: 80 Rounds Processing</h5>
-                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
-                                Each round performs complex bit operations to mix the message bits with the hash state.
-                            </p>
-                            
-                            <!-- Round Controls -->
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
-                                    <div>
-                                        <span style="font-size: 0.9rem; color: #334155;">Round: </span>
-                                        <span id="current-round" style="font-weight: bold; color: #3b82f6;">0</span>
-                                        <span style="color: #64748b;"> / 79</span>
-                                    </div>
-                                    <div style="display: flex; gap: 10px;">
-                                        <button onclick="prevRound()" style="background: #64748b; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
-                                            ← Previous
-                                        </button>
-                                        <button onclick="nextRound()" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
-                                            Next →
-                                        </button>
-                                        <button onclick="animateRounds()" style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
-                                            <i data-feather="play" style="width: 14px; height: 14px; margin-right: 5px;"></i> Animate
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Progress Bar -->
-                                <div style="margin-bottom: 15px;">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                        <span style="font-size: 0.8rem; color: #64748b;">Round Progress</span>
-                                        <span id="round-progress" style="font-size: 0.8rem; color: #3b82f6; font-weight: 600;">0%</span>
-                                    </div>
-                                    <div style="height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
-                                        <div id="round-progress-bar" style="height: 100%; background: #3b82f6; width: 0%; transition: width 0.3s;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Round Visualization -->
-                            <div id="round-visualization" style="background: white; border: 2px solid #3b82f6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                                <div style="text-align: center; margin-bottom: 20px;">
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #1e40af;">
-                                        Round <span id="round-number">0</span> Calculations
-                                    </div>
-                                </div>
-                                
-                                <!-- T1 and T2 Calculations -->
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
-                                    <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; border: 1px solid #0ea5e9;">
-                                        <div style="font-weight: bold; color: #0369a1; margin-bottom: 10px; font-size: 0.9rem;">T₁ Calculation</div>
-                                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; margin-bottom: 10px;">
-                                            T₁ = h + Ch(e,f,g) + Σ₁(e) + W[t] + K[t]
-                                        </div>
-                                        <div id="t1-values" style="font-size: 0.75rem; color: #64748b;">
-                                            <!-- Values will appear here -->
-                                        </div>
-                                    </div>
-                                    <div style="background: #f0fdf4; padding: 15px; border-radius: 6px; border: 1px solid #10b981;">
-                                        <div style="font-weight: bold; color: #047857; margin-bottom: 10px; font-size: 0.9rem;">T₂ Calculation</div>
-                                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #065f46; margin-bottom: 10px;">
-                                            T₂ = Σ₀(a) + Maj(a,b,c)
-                                        </div>
-                                        <div id="t2-values" style="font-size: 0.75rem; color: #64748b;">
-                                            <!-- Values will appear here -->
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Register Updates -->
-                                <div style="background: #f8fafc; padding: 20px; border-radius: 6px;">
-                                    <div style="font-weight: bold; color: #334155; margin-bottom: 15px; font-size: 0.9rem;">Register Updates:</div>
-                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #475569; text-align: center; margin-bottom: 15px;">
-                                        a = T₁ + T₂<br>
-                                        e = d + T₁
-                                    </div>
-                                    <div id="register-updates" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                                        <!-- Generated dynamically -->
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Round Constants -->
-                            <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 15px;">
-                                <h6 style="margin: 0 0 10px 0; color: #92400e; font-size: 0.9rem;">Round Constants (K[t]):</h6>
-                                <p style="margin: 0; font-size: 0.85rem; color: #92400e;">
-                                    80 constants derived from cube roots of first 80 prime numbers. 
-                                    Each is a 64-bit hexadecimal value that provides unique mixing in each round.
-                                </p>
-                            </div>
+                <!-- Flow Explanation -->
+                <div style="margin-top: 30px;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 20px; border-radius: 8px;">
+                            <h5 style="margin-top: 0; color: #0369a1; margin-bottom: 10px; font-size: 1rem;">Flow of the Process</h5>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem; color: #0c4a6e;">
+                                <li>Top to bottom: Input to output flow</li>
+                                <li>Left to right: Iterative processing</li>
+                                <li>Each block depends on previous hash</li>
+                                <li>Chain reaction ensures avalanche effect</li>
+                            </ul>
                         </div>
-
+                        
+                        <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 20px; border-radius: 8px;">
+                            <h5 style="margin-top: 0; color: #047857; margin-bottom: 10px; font-size: 1rem;">Merkle-Damgård Construction</h5>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem; color: #065f46;">
+                                <li>Uses chaining method</li>
+                                <li>Each block's output feeds next block</li>
+                                <li>Compression function F is applied repeatedly</li>
+                                <li>Final output is 512-bit hash code</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SHA-512 Constants -->
-            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
-                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">SHA-512 Initial Hash Values (H₀)</h4>
-                
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
-                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₀ (a)</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
-                            6a09e667f3bcc908
-                        </div>
-                    </div>
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
-                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₁ (b)</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
-                            bb67ae8584caa73b
-                        </div>
-                    </div>
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
-                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₂ (c)</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
-                            3c6ef372fe94f82b
-                        </div>
-                    </div>
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
-                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₃ (d)</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
-                            a54ff53a5f1d36f1
-                        </div>
-                    </div>
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
-                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₄ (e)</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
-                            510e527fade682d1
-                        </div>
-                    </div>
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
-                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₅ (f)</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
-                            9b05688c2b3e6c1f
-                        </div>
-                    </div>
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
-                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₆ (g)</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
-                            1f83d9abfb41bd6b
-                        </div>
-                    </div>
-                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
-                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₇ (h)</div>
-                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
-                            5be0cd19137e2179
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 6px;">
-                    <h6 style="margin: 0 0 10px 0; color: #92400e; font-size: 0.9rem;">About Initial Hash Values:</h6>
-                    <p style="margin: 0; font-size: 0.85rem; color: #92400e;">
-                        These 8 × 64-bit constants are the first 64 bits of the fractional parts of the 
-                        square roots of the first 8 prime numbers (2, 3, 5, 7, 11, 13, 17, 19).
-                    </p>
-                </div>
-            </div>
-
-            <!-- Bitwise Operations Reference -->
+            <!-- Interactive Process Controls -->
             <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Bitwise Operations in SHA-512</h4>
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Interactive Process Demonstration</h4>
                 
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 25px;">
-                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
-                        <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Logical Operations</h5>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
-                            <div style="text-align: center;">
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: #3b82f6; margin-bottom: 8px;">∧</div>
-                                <div style="font-size: 0.9rem; font-weight: 600; color: #1e40af;">AND</div>
-                                <div style="font-size: 0.75rem; color: #64748b;">1 ∧ 1 = 1, else 0</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: #10b981; margin-bottom: 8px;">⊕</div>
-                                <div style="font-size: 0.9rem; font-weight: 600; color: #047857;">XOR</div>
-                                <div style="font-size: 0.75rem; color: #64748b;">0 ⊕ 1 = 1, 1 ⊕ 0 = 1</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: #ef4444; margin-bottom: 8px;">¬</div>
-                                <div style="font-size: 0.9rem; font-weight: 600; color: #b91c1c;">NOT</div>
-                                <div style="font-size: 0.75rem; color: #64748b;">¬0 = 1, ¬1 = 0</div>
-                            </div>
-                        </div>
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="display: inline-flex; gap: 15px; background: #f8fafc; padding: 15px; border-radius: 8px;">
+                        <button onclick="showProcessStep(1)" class="process-step-btn active" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">
+                            Step 1: Preprocessing
+                        </button>
+                        <button onclick="showProcessStep(2)" class="process-step-btn" style="background: #64748b; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">
+                            Step 2: First Block
+                        </button>
+                        <button onclick="showProcessStep(3)" class="process-step-btn" style="background: #64748b; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">
+                            Step 3: Iteration
+                        </button>
+                        <button onclick="showProcessStep(4)" class="process-step-btn" style="background: #64748b; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem;">
+                            Step 4: Final Hash
+                        </button>
                     </div>
-                    
-                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
-                        <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Positional Operations</h5>
-                        
-                        <div style="margin-bottom: 20px;">
-                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #8b5cf6; margin-right: 15px; width: 80px;">ROTRⁿ(x)</div>
-                                <div style="flex: 1;">
-                                    <div style="font-size: 0.9rem; font-weight: 600; color: #5b21b6;">Rotate Right</div>
-                                    <div style="font-size: 0.75rem; color: #64748b;">Bits wrap around from right to left</div>
+                </div>
+
+                <!-- Process Step Content -->
+                <div id="process-step-content" style="min-height: 200px; background: #f8fafc; border-radius: 8px; padding: 25px; border: 2px solid #e2e8f0;">
+                    <div id="step-1-content">
+                        <h5 style="color: #1e40af; margin-bottom: 15px; font-size: 1.1rem;">Step 1: Preprocessing and Padding</h5>
+                        <div style="display: flex; gap: 20px; align-items: center;">
+                            <div style="flex: 1;">
+                                <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                                    The original message of length <strong>L bits</strong> is padded so that its total length becomes a multiple of 1024 bits.
+                                </p>
+                                <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.6;">
+                                    <li><strong>Add '1' bit:</strong> Start with a single '1' bit</li>
+                                    <li><strong>Add k×'0' bits:</strong> Add as many '0' bits as necessary</li>
+                                    <li><strong>Add 128-bit length:</strong> Append original length L as 128-bit binary</li>
+                                </ul>
+                                <div style="margin-top: 15px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #64748b;">
+                                        Total length after padding: N × 1024 bits
+                                    </div>
                                 </div>
                             </div>
-                            <div style="display: flex; align-items: center;">
-                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #f59e0b; margin-right: 15px; width: 80px;">SHRⁿ(x)</div>
-                                <div style="flex: 1;">
-                                    <div style="font-size: 0.9rem; font-weight: 600; color: #b45309;">Shift Right</div>
-                                    <div style="font-size: 0.75rem; color: #64748b;">Zeros added on left, bits lost on right</div>
+                            <div style="flex: 1; text-align: center;">
+                                <div style="background: #3b82f6; color: white; padding: 20px; border-radius: 8px; display: inline-block;">
+                                    <div style="font-size: 1.5rem; font-weight: bold; margin-bottom: 10px;">EXAMPLE</div>
+                                    <div style="font-size: 0.9rem;">Message: "Hello" (40 bits)</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.9; margin-top: 5px;">
+                                        Padding: '1' + 887×'0' + 128-bit(40)
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 20px;">
-                    <h5 style="color: #166534; margin-bottom: 10px; font-size: 1rem;">Addition Modulo 2⁶⁴</h5>
-                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #065f46; margin-bottom: 10px;">
-                        a + b (mod 2⁶⁴)
+
+                <!-- Ready to Proceed -->
+                <div id="ready-section" style="margin-top: 25px; text-align: center;">
+                    <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 20px;">
+                        <div style="font-size: 1.1rem; font-weight: 600; color: #166534; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <i data-feather="check-circle" style="width: 20px; height: 20px;"></i>
+                            Ready to Proceed?
+                        </div>
+                        <p style="color: #4b5563; font-size: 0.9rem; margin-bottom: 15px;">
+                            You've learned about <span id="current-step-name">preprocessing and padding</span>. 
+                            Do you understand how SHA-512 prepares the message for processing?
+                        </p>
+                        <button onclick="nextProcessStep()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 10px;">
+                            <i data-feather="arrow-right" style="width: 16px; height: 16px;"></i>
+                            Continue to Next Step
+                        </button>
                     </div>
-                    <p style="margin: 0; font-size: 0.85rem; color: #166534;">
-                        In SHA-512, all additions are performed modulo 2⁶⁴. When the sum of two 64-bit numbers 
-                        exceeds 2⁶⁴ - 1, the result wraps around by discarding the overflow bit.
-                    </p>
                 </div>
             </div>
 
@@ -2063,403 +1815,1629 @@ function addSHA512Implementation() {
     // Inject styles
     const style = document.createElement('style');
     style.innerHTML = `
-        .process-tab {
+        .process-step-btn {
             transition: all 0.3s ease;
         }
-        .process-tab:hover {
-            color: #3b82f6;
+        .process-step-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .process-tab.active {
-            color: #3b82f6;
-            border-bottom-color: #3b82f6 !important;
+        .process-step-btn.active {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .process-panel {
-            transition: opacity 0.3s ease;
+        .block-process {
+            transition: all 0.3s ease;
+        }
+        .block-process:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
     `;
     document.head.appendChild(style);
 
     appendContent(html);
     feather.replace();
-    initializeSHA512Visualizations();
+    initializeProcessSteps();
 }
 
-// SHA-512 Implementation Logic
-let currentRound = 0;
-let roundAnimationInterval = null;
+// Process Steps Logic
+let currentProcessStep = 1;
 
-function initializeSHA512Visualizations() {
-    // Initialize initial words visualization
-    updateInitialWords();
-    updateWorkingVars();
-    updateRoundVisualization();
+function initializeProcessSteps() {
+    updateProcessStepContent();
 }
 
-function showProcessTab(tabName) {
-    // Update tab buttons
-    document.querySelectorAll('.process-tab').forEach(tab => {
-        tab.classList.remove('active');
-        tab.style.borderBottom = '2px solid transparent';
-        tab.style.color = '#64748b';
-    });
+function showProcessStep(step) {
+    currentProcessStep = step;
     
-    event.target.classList.add('active');
-    event.target.style.borderBottom = '2px solid #3b82f6';
-    event.target.style.color = '#3b82f6';
-    
-    // Show selected panel
-    document.querySelectorAll('.process-panel').forEach(panel => {
-        panel.style.display = 'none';
-    });
-    
-    document.getElementById(`${tabName}-panel`).style.display = 'block';
-    
-    feather.replace();
-}
-
-function setExample(message) {
-    document.getElementById('sha-input').value = message;
-}
-
-function calculateSHA512() {
-    const input = document.getElementById('sha-input').value;
-    
-    if (!input.trim()) {
-        alert('Please enter a message to hash');
-        return;
-    }
-    
-    // Show output area
-    const outputDiv = document.getElementById('sha-output');
-    outputDiv.style.display = 'block';
-    
-    // Calculate SHA-512 (simplified for demo)
-    const hash = simulateSHA512(input);
-    document.getElementById('hash-result').textContent = hash;
-    document.getElementById('hash-length').textContent = hash.length;
-    
-    // Update padding visualization
-    updatePaddingVisualization(input);
-    
-    // Update message expansion
-    updateMessageExpansion();
-    
-    // Reset to first tab
-    showProcessTab('padding');
-    
-    feather.replace();
-}
-
-function resetSHA512() {
-    document.getElementById('sha-input').value = '';
-    document.getElementById('sha-output').style.display = 'none';
-    document.getElementById('padding-visual').style.display = 'none';
-    document.getElementById('padding-info').style.display = 'block';
-    
-    // Reset round visualization
-    currentRound = 0;
-    updateRoundVisualization();
-    
-    if (roundAnimationInterval) {
-        clearInterval(roundAnimationInterval);
-        roundAnimationInterval = null;
-    }
-    
-    feather.replace();
-}
-
-function updatePaddingVisualization(message) {
-    const visual = document.getElementById('padding-visual');
-    const info = document.getElementById('padding-info');
-    const msgLength = message.length * 8; // Approximate bits
-    
-    if (msgLength > 0) {
-        visual.style.display = 'block';
-        info.style.display = 'none';
-        
-        // Calculate padding
-        const totalBits = calculateTotalBits(msgLength);
-        const blockCount = Math.ceil(totalBits / 1024);
-        
-        // Update visualization
-        document.getElementById('total-length').textContent = totalBits;
-        document.getElementById('block-count').textContent = blockCount;
-        
-        // Animate padding
-        const msgDiv = document.getElementById('pad-msg');
-        const oneDiv = document.getElementById('pad-one');
-        const zerosDiv = document.getElementById('pad-zeros');
-        const lengthDiv = document.getElementById('pad-length');
-        
-        // Set widths proportionally
-        const msgWidth = Math.min(30, (msgLength / totalBits) * 100);
-        const oneWidth = 5;
-        const lengthWidth = 25;
-        const zerosWidth = 100 - msgWidth - oneWidth - lengthWidth;
-        
-        msgDiv.style.width = `${msgWidth}%`;
-        oneDiv.style.width = `${oneWidth}%`;
-        zerosDiv.style.width = `${zerosWidth}%`;
-        lengthDiv.style.width = `${lengthWidth}%`;
-    }
-}
-
-function calculateTotalBits(messageBits) {
-    // SHA-512 padding: message + '1' + k×'0' + 128-bit length
-    // Total must be multiple of 1024
-    const L = messageBits;
-    const K = (896 - (L + 1 + 128) % 1024 + 1024) % 1024;
-    return L + 1 + K + 128;
-}
-
-function updateInitialWords() {
-    const container = document.getElementById('initial-words');
-    container.innerHTML = '';
-    
-    for (let i = 0; i < 16; i++) {
-        const wordDiv = document.createElement('div');
-        wordDiv.style.background = '#e0f2fe';
-        wordDiv.style.padding = '10px';
-        wordDiv.style.borderRadius = '4px';
-        wordDiv.style.textAlign = 'center';
-        wordDiv.style.fontFamily = "'JetBrains Mono', monospace";
-        wordDiv.style.fontSize = '0.7rem';
-        wordDiv.style.color = '#0369a1';
-        
-        // Generate random 16-character hex for demo
-        const randomHex = Array.from({length: 16}, () => 
-            Math.floor(Math.random() * 16).toString(16)).join('');
-        
-        wordDiv.innerHTML = `
-            <div style="font-weight: bold; margin-bottom: 2px;">W[${i}]</div>
-            <div>${randomHex}</div>
-        `;
-        
-        container.appendChild(wordDiv);
-    }
-}
-
-function updateMessageExpansion() {
-    const container = document.getElementById('generated-words');
-    container.innerHTML = '';
-    
-    for (let i = 16; i < 32; i++) { // Show first 16 generated words
-        const wordDiv = document.createElement('div');
-        wordDiv.style.padding = '8px';
-        wordDiv.style.borderBottom = '1px solid #e2e8f0';
-        wordDiv.style.fontFamily = "'JetBrains Mono', monospace";
-        wordDiv.style.fontSize = '0.75rem';
-        wordDiv.style.color = '#475569';
-        
-        // Generate demo expansion formula
-        const w15 = Array.from({length: 16}, () => 
-            Math.floor(Math.random() * 16).toString(16)).join('');
-        const w2 = Array.from({length: 16}, () => 
-            Math.floor(Math.random() * 16).toString(16)).join('');
-        const w7 = Array.from({length: 16}, () => 
-            Math.floor(Math.random() * 16).toString(16)).join('');
-        const w16 = Array.from({length: 16}, () => 
-            Math.floor(Math.random() * 16).toString(16)).join('');
-        
-        wordDiv.innerHTML = `
-            <div style="margin-bottom: 2px;">
-                <span style="color: #3b82f6; font-weight: bold;">W[${i}]</span> = 
-                σ₁(${w2}) + ${w7} + σ₀(${w15}) + ${w16}
-            </div>
-            <div style="color: #94a3b8; font-size: 0.7rem;">
-                Result: ${Array.from({length: 16}, () => 
-                    Math.floor(Math.random() * 16).toString(16)).join('')}
-            </div>
-        `;
-        
-        container.appendChild(wordDiv);
-    }
-}
-
-function updateWorkingVars() {
-    const container = document.getElementById('working-vars');
-    container.innerHTML = '';
-    
-    const variables = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#14b8a6'];
-    
-    variables.forEach((varName, index) => {
-        const varDiv = document.createElement('div');
-        varDiv.style.background = '#f8fafc';
-        varDiv.style.padding = '15px';
-        varDiv.style.borderRadius = '8px';
-        varDiv.style.textAlign = 'center';
-        varDiv.style.border = `2px solid ${colors[index]}`;
-        
-        // Generate random 64-bit value for demo
-        const randomValue = Array.from({length: 16}, () => 
-            Math.floor(Math.random() * 16).toString(16)).join('');
-        
-        varDiv.innerHTML = `
-            <div style="font-size: 1.2rem; font-weight: bold; color: ${colors[index]}; margin-bottom: 5px;">${varName}</div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #64748b; word-break: break-all;">
-                ${randomValue}
-            </div>
-            <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 5px;">64 bits</div>
-        `;
-        
-        container.appendChild(varDiv);
-    });
-}
-
-function updateRoundVisualization() {
-    document.getElementById('current-round').textContent = currentRound;
-    document.getElementById('round-number').textContent = currentRound;
-    
-    // Update progress
-    const progress = Math.round((currentRound / 79) * 100);
-    document.getElementById('round-progress').textContent = `${progress}%`;
-    document.getElementById('round-progress-bar').style.width = `${progress}%`;
-    
-    // Update T1 and T2 values
-    updateT1T2Values();
-    
-    // Update register updates
-    updateRegisterUpdates();
-}
-
-function updateT1T2Values() {
-    // Generate random values for demo
-    const hVal = Array.from({length: 4}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    const chVal = Array.from({length: 4}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    const sigma1Val = Array.from({length: 4}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    const wVal = Array.from({length: 4}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    const kVal = Array.from({length: 4}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    
-    const t1Val = Array.from({length: 16}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    
-    const sigma0Val = Array.from({length: 4}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    const majVal = Array.from({length: 4}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    
-    const t2Val = Array.from({length: 16}, () => 
-        Math.floor(Math.random() * 16).toString(16)).join('');
-    
-    document.getElementById('t1-values').innerHTML = `
-        h = ${hVal}...<br>
-        Ch(e,f,g) = ${chVal}...<br>
-        Σ₁(e) = ${sigma1Val}...<br>
-        W[${currentRound}] = ${wVal}...<br>
-        K[${currentRound}] = ${kVal}...<br>
-        <div style="margin-top: 5px; color: #1e40af; font-weight: bold;">
-            T₁ = ${t1Val}
-        </div>
-    `;
-    
-    document.getElementById('t2-values').innerHTML = `
-        Σ₀(a) = ${sigma0Val}...<br>
-        Maj(a,b,c) = ${majVal}...<br>
-        <div style="margin-top: 5px; color: #047857; font-weight: bold;">
-            T₂ = ${t2Val}
-        </div>
-    `;
-}
-
-function updateRegisterUpdates() {
-    const container = document.getElementById('register-updates');
-    container.innerHTML = '';
-    
-    const registers = [
-        {name: 'h', from: 'g', color: '#3b82f6'},
-        {name: 'g', from: 'f', color: '#10b981'},
-        {name: 'f', from: 'e', color: '#f59e0b'},
-        {name: 'e', from: 'd + T₁', color: '#ef4444'},
-        {name: 'd', from: 'c', color: '#8b5cf6'},
-        {name: 'c', from: 'b', color: '#06b6d4'},
-        {name: 'b', from: 'a', color: '#ec4899'},
-        {name: 'a', from: 'T₁ + T₂', color: '#14b8a6'}
-    ];
-    
-    registers.forEach(reg => {
-        const regDiv = document.createElement('div');
-        regDiv.style.background = '#f8fafc';
-        regDiv.style.padding = '10px';
-        regDiv.style.borderRadius = '6px';
-        regDiv.style.textAlign = 'center';
-        regDiv.style.borderLeft = `4px solid ${reg.color}`;
-        
-        regDiv.innerHTML = `
-            <div style="font-size: 0.9rem; font-weight: bold; color: ${reg.color}; margin-bottom: 5px;">
-                ${reg.name} ← ${reg.from}
-            </div>
-            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #64748b;">
-                ${Array.from({length: 4}, () => 
-                    Math.floor(Math.random() * 16).toString(16)).join('')}...
-            </div>
-        `;
-        
-        container.appendChild(regDiv);
-    });
-}
-
-function prevRound() {
-    if (currentRound > 0) {
-        currentRound--;
-        updateRoundVisualization();
-    }
-}
-
-function nextRound() {
-    if (currentRound < 79) {
-        currentRound++;
-        updateRoundVisualization();
-    }
-}
-
-function animateRounds() {
-    if (roundAnimationInterval) {
-        clearInterval(roundAnimationInterval);
-        roundAnimationInterval = null;
-        return;
-    }
-    
-    roundAnimationInterval = setInterval(() => {
-        if (currentRound < 79) {
-            currentRound++;
-            updateRoundVisualization();
-        } else {
-            clearInterval(roundAnimationInterval);
-            roundAnimationInterval = null;
+    // Update button states
+    document.querySelectorAll('.process-step-btn').forEach((btn, index) => {
+        btn.classList.remove('active');
+        btn.style.background = '#64748b';
+        if (index === step - 1) {
+            btn.classList.add('active');
+            btn.style.background = '#3b82f6';
         }
-    }, 100);
+    });
+    
+    updateProcessStepContent();
+    feather.replace();
 }
 
-function simulateSHA512(input) {
-    // Simplified SHA-512 simulation for demo purposes
-    // In a real implementation, this would be the actual SHA-512 algorithm
+function updateProcessStepContent() {
+    const contentDiv = document.getElementById('process-step-content');
+    const stepNameSpan = document.getElementById('current-step-name');
     
-    // Convert input to bytes
-    const encoder = new TextEncoder();
-    const data = encoder.encode(input);
+    switch(currentProcessStep) {
+        case 1:
+            stepNameSpan.textContent = 'preprocessing and padding';
+            contentDiv.innerHTML = `
+                <div id="step-1-content">
+                    <h5 style="color: #1e40af; margin-bottom: 15px; font-size: 1.1rem;">Step 1: Preprocessing and Padding</h5>
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <div style="flex: 1;">
+                            <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                                The original message of length <strong>L bits</strong> is padded so that its total length becomes a multiple of 1024 bits.
+                            </p>
+                            <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.6;">
+                                <li><strong>Add '1' bit:</strong> Start with a single '1' bit after the message</li>
+                                <li><strong>Add k×'0' bits:</strong> Add minimum number of '0' bits to reach (length mod 1024) = 896</li>
+                                <li><strong>Add 128-bit length:</strong> Append original length L as 128-bit binary number</li>
+                            </ul>
+                            <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #64748b; margin-bottom: 5px;">
+                                    Formula: Message + '1' + k×'0' + 128-bit(L)
+                                </div>
+                                <div style="font-size: 0.8rem; color: #94a3b8;">
+                                    Total padded length: N × 1024 bits
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #3b82f6; color: white; padding: 20px; border-radius: 8px; display: inline-block;">
+                                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">📝 EXAMPLE</div>
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;">Message: "SHA" (24 bits)</div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; margin-top: 10px;">
+                                    Message: SHA<br>
+                                    Padding: 1 + 887×0<br>
+                                    Length: 128-bit(24)<br>
+                                    Total: 1024 bits
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+            
+        case 2:
+            stepNameSpan.textContent = 'first block processing';
+            contentDiv.innerHTML = `
+                <div id="step-2-content">
+                    <h5 style="color: #1e40af; margin-bottom: 15px; font-size: 1.1rem;">Step 2: First Block Processing</h5>
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <div style="flex: 1;">
+                            <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                                The first 1024-bit block (M₁) is processed with the Initialization Vector (H₀).
+                            </p>
+                            <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.6;">
+                                <li><strong>Inputs:</strong> H₀ (512-bit IV) + M₁ (1024-bit block)</li>
+                                <li><strong>Compression Function F:</strong> Processes the data through 80 rounds</li>
+                                <li><strong>Output:</strong> H₁ = H₀ + F(M₁, H₀)</li>
+                                <li><strong>Key Point:</strong> Each addition is modulo 2⁶⁴</li>
+                            </ul>
+                            <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #64748b; text-align: center;">
+                                    H₁ = H₀ + F(M₁, H₀)
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #10b981; color: white; padding: 20px; border-radius: 8px; display: inline-block;">
+                                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">⚙️ COMPRESSION FUNCTION</div>
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;">Inside Function F:</div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; margin-top: 10px;">
+                                    1. Message Expansion (W[0]-W[79])<br>
+                                    2. 80 Rounds Processing<br>
+                                    3. Register Updates (a-h)<br>
+                                    4. Final Addition
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+            
+        case 3:
+            stepNameSpan.textContent = 'iterative processing';
+            contentDiv.innerHTML = `
+                <div id="step-3-content">
+                    <h5 style="color: #1e40af; margin-bottom: 15px; font-size: 1.1rem;">Step 3: Iterative Processing</h5>
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <div style="flex: 1;">
+                            <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                                Each subsequent block uses the hash from previous block as input.
+                            </p>
+                            <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.6;">
+                                <li><strong>Chaining:</strong> Hᵢ = Hᵢ₋₁ + F(Mᵢ, Hᵢ₋₁)</li>
+                                <li><strong>Avalanche Effect:</strong> Small changes propagate through chain</li>
+                                <li><strong>Parallelism:</strong> Cannot process blocks in parallel (sequential dependency)</li>
+                                <li><strong>Security:</strong> Each block depends on all previous blocks</li>
+                            </ul>
+                            <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #64748b; text-align: center;">
+                                    For i = 2 to N: Hᵢ = Hᵢ₋₁ + F(Mᵢ, Hᵢ₋₁)
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #f59e0b; color: white; padding: 20px; border-radius: 8px; display: inline-block;">
+                                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">🔗 CHAIN EFFECT</div>
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;">Dependency Chain:</div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; margin-top: 10px;">
+                                    M₁ → H₁<br>
+                                    M₂ → H₂ (depends on H₁)<br>
+                                    M₃ → H₃ (depends on H₂)<br>
+                                    ...<br>
+                                    Mₙ → Hₙ (depends on Hₙ₋₁)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+            
+        case 4:
+            stepNameSpan.textContent = 'final hash output';
+            contentDiv.innerHTML = `
+                <div id="step-4-content">
+                    <h5 style="color: #1e40af; margin-bottom: 15px; font-size: 1.1rem;">Step 4: Final Hash Output</h5>
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <div style="flex: 1;">
+                            <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;">
+                                After processing all N blocks, the final hash value Hₙ is the output.
+                            </p>
+                            <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.6;">
+                                <li><strong>Final Hash:</strong> Hₙ = Hₙ₋₁ + F(Mₙ, Hₙ₋₁)</li>
+                                <li><strong>Size:</strong> 512 bits (64 bytes)</li>
+                                <li><strong>Uniqueness:</strong> Acts as digital fingerprint</li>
+                                <li><strong>Verification:</strong> Same input always produces same hash</li>
+                            </ul>
+                            <div style="margin-top: 15px; padding: 15px; background: linear-gradient(135deg, #1e40af, #3b82f6); border-radius: 6px;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: white; text-align: center;">
+                                    FINAL OUTPUT: 512-bit Hash Code
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="background: #8b5cf6; color: white; padding: 20px; border-radius: 8px; display: inline-block;">
+                                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">🎯 RESULT</div>
+                                <div style="font-size: 0.9rem; margin-bottom: 5px;">Example SHA-512 Hash:</div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; margin-top: 10px; word-break: break-all;">
+                                    "Hello" →<br>
+                                    cf83e1357eefb8bdf154...<br>
+                                    ...2850d66d8007d620e4
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            break;
+    }
+}
+
+function nextProcessStep() {
+    if (currentProcessStep < 4) {
+        currentProcessStep++;
+        showProcessStep(currentProcessStep);
+    } else {
+        // Reset to step 1 when done
+        currentProcessStep = 1;
+        showProcessStep(currentProcessStep);
+    }
+}
+// NEW SECTION: SHA-512 FAQ - Important Questions Answered
+function addSHA512FAQSection() {
+    const html = `
+        <div class="viz-section" style="margin-top: 40px; border-top: 2px solid #f1f5f9; padding-top: 40px;">
+            
+            <div class="module-header">
+                <div class="module-title" style="color:#334155;">
+                    <i data-feather="help-circle" style="color:#f59e0b;"></i> SHA-512: Important Questions Answered
+                </div>
+                <div class="module-subtitle">
+                    Addressing key questions about SHA-512 initialization and processing logic.
+                </div>
+            </div>
+
+            <!-- Question 1 -->
+            <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px;">
+                    <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
+                        Q1
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0; color:#334155; font-size: 1.1rem;">Where does H₀ (512-bit Initialization Vector) come from?</h4>
+                        <div style="margin-top: 5px; font-size: 0.9rem; color: #64748b;">
+                            What is it and why do we need this starting value?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Answer -->
+                <div style="background: #f0f9ff; border-radius: 8px; padding: 20px; border-left: 4px solid #0ea5e9;">
+                    <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 15px;">
+                        <div style="background: #0ea5e9; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
+                            A1
+                        </div>
+                        <div style="flex: 1;">
+                            <h5 style="margin: 0; color:#0369a1; font-size: 1rem;">The Initialization Vector (IV) / H₀ Explained</h5>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <h6 style="color: #0c4a6e; margin-bottom: 10px; font-size: 0.95rem;">What is H₀?</h6>
+                            <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin: 0;">
+                                H₀ is a <strong>fixed 512-bit constant value</strong> that serves as the starting point for the SHA-512 algorithm. 
+                                It's also called the <strong>Initialization Vector (IV)</strong>.
+                            </p>
+                            <div style="margin-top: 15px; padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0369a1;">
+                                    H₀ = {H₀₀, H₀₁, H₀₂, H₀₃, H₀₄, H₀₅, H₀₆, H₀₇}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h6 style="color: #0c4a6e; margin-bottom: 10px; font-size: 0.95rem;">Why do we need H₀?</h6>
+                            <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin: 0; padding-left: 20px;">
+                                <li>Provides a <strong>starting state</strong> for the first block</li>
+                                <li>Ensures <strong>deterministic output</strong> (same input → same hash)</li>
+                                <li>Prevents <strong>length extension attacks</strong></li>
+                                <li>Standardized across all SHA-512 implementations</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Where it comes from -->
+                    <div style="background: white; border-radius: 8px; padding: 15px; border: 2px solid #0ea5e9; margin-bottom: 15px;">
+                        <h6 style="color: #0c4a6e; margin-bottom: 10px; font-size: 0.95rem;">Where does H₀ come from?</h6>
+                        <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin: 0 0 15px 0;">
+                            H₀ is derived from the <strong>first 64 bits of the fractional parts of the square roots 
+                            of the first 8 prime numbers</strong> (2, 3, 5, 7, 11, 13, 17, 19).
+                        </p>
+                        
+                        <!-- Visual representation -->
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px;">
+                            <div style="text-align: center; padding: 10px; background: #f0f9ff; border-radius: 6px;">
+                                <div style="font-size: 0.7rem; color: #64748b;">Prime 2</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #0369a1;">√2 → 6a09e667...</div>
+                            </div>
+                            <div style="text-align: center; padding: 10px; background: #f0f9ff; border-radius: 6px;">
+                                <div style="font-size: 0.7rem; color: #64748b;">Prime 3</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #0369a1;">√3 → bb67ae85...</div>
+                            </div>
+                            <div style="text-align: center; padding: 10px; background: #f0f9ff; border-radius: 6px;">
+                                <div style="font-size: 0.7rem; color: #64748b;">Prime 5</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #0369a1;">√5 → 3c6ef372...</div>
+                            </div>
+                            <div style="text-align: center; padding: 10px; background: #f0f9ff; border-radius: 6px;">
+                                <div style="font-size: 0.7rem; color: #64748b;">Prime 7</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #0369a1;">√7 → a54ff53a...</div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; font-size: 0.8rem; color: #64748b;">
+                            8 primes → 8 × 64-bit values = 512-bit H₀
+                        </div>
+                    </div>
+
+                    <!-- Complete H₀ Values -->
+                    <div>
+                        <h6 style="color: #0c4a6e; margin-bottom: 10px; font-size: 0.95rem;">Complete H₀ Values (Hexadecimal):</h6>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                            <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 3px;">H₀₀ (a)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #0369a1; word-break: break-all;">6a09e667f3bcc908</div>
+                            </div>
+                            <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 3px;">H₀₁ (b)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #0369a1; word-break: break-all;">bb67ae8584caa73b</div>
+                            </div>
+                            <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 3px;">H₀₂ (c)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #0369a1; word-break: break-all;">3c6ef372fe94f82b</div>
+                            </div>
+                            <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 3px;">H₀₃ (d)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #0369a1; word-break: break-all;">a54ff53a5f1d36f1</div>
+                            </div>
+                            <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 3px;">H₀₄ (e)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #0369a1; word-break: break-all;">510e527fade682d1</div>
+                            </div>
+                            <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 3px;">H₀₅ (f)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #0369a1; word-break: break-all;">9b05688c2b3e6c1f</div>
+                            </div>
+                            <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 3px;">H₀₆ (g)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #0369a1; word-break: break-all;">1f83d9abfb41bd6b</div>
+                            </div>
+                            <div style="padding: 10px; background: white; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                <div style="font-size: 0.7rem; color: #64748b; margin-bottom: 3px;">H₀₇ (h)</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #0369a1; word-break: break-all;">5be0cd19137e2179</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px;">
+                    <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
+                        Q2
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0; color:#334155; font-size: 1.1rem;">When does the chain/loop occur in SHA-512?</h4>
+                        <div style="margin-top: 5px; font-size: 0.9rem; color: #64748b;">
+                            If a message fits in 1024 bits, does the iterative process still happen?
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Answer -->
+                <div style="background: #f0fdf4; border-radius: 8px; padding: 20px; border-left: 4px solid #10b981;">
+                    <div style="display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
+                            A2
+                        </div>
+                        <div style="flex: 1;">
+                            <h5 style="margin: 0; color:#047857; font-size: 1rem;">Understanding the Iterative Chain Process</h5>
+                        </div>
+                    </div>
+
+                    <!-- Key Concept -->
+                    <div style="background: white; border-radius: 8px; padding: 15px; border: 2px solid #86efac; margin-bottom: 20px;">
+                        <h6 style="color: #065f46; margin-bottom: 10px; font-size: 0.95rem;">Key Concept: Merkle-Damgård Construction</h6>
+                        <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin: 0;">
+                            SHA-512 uses the <strong>Merkle-Damgård construction</strong>, which <strong>always</strong> processes data in an 
+                            iterative chain, regardless of message length.
+                        </p>
+                    </div>
+
+                    <!-- Scenarios Visualization -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                        <!-- Scenario 1: Short Message -->
+                        <div style="background: white; border-radius: 8px; padding: 20px; border: 2px solid #f0f0f0;">
+                            <div style="text-align: center; margin-bottom: 15px;">
+                                <div style="background: #3b82f6; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; margin: 0 auto 10px;">
+                                    1
+                                </div>
+                                <h6 style="margin: 0; color:#1e40af; font-size: 0.95rem;">Short Message (< 896 bits)</h6>
+                            </div>
+                            
+                            <div style="text-align: center; margin-bottom: 15px;">
+                                <div style="display: inline-block; padding: 8px 15px; background: #f0f9ff; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0369a1;">
+                                        Message: "Hi" (16 bits)
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="font-size: 0.85rem; color: #4b5563; line-height: 1.5;">
+                                <strong>Process:</strong>
+                                <ol style="margin: 10px 0 0 0; padding-left: 20px;">
+                                    <li>Add padding (1 + 751×0 + 128-bit length)</li>
+                                    <li>Total becomes 1024 bits (1 block)</li>
+                                    <li>Process <strong>ONE iteration</strong> of the chain</li>
+                                    <li>H₁ = H₀ + F(M₁, H₀)</li>
+                                </ol>
+                            </div>
+                            
+                            <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 6px; text-align: center;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0369a1;">
+                                    H₁ = H₀ + F(M₁, H₀)
+                                </div>
+                                <div style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">
+                                    Still 1 iteration of the chain
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scenario 2: Multiple Blocks -->
+                        <div style="background: white; border-radius: 8px; padding: 20px; border: 2px solid #f0f0f0;">
+                            <div style="text-align: center; margin-bottom: 15px;">
+                                <div style="background: #ef4444; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; margin: 0 auto 10px;">
+                                    2
+                                </div>
+                                <h6 style="margin: 0; color:#b91c1c; font-size: 0.95rem;">Long Message (> 1024 bits)</h6>
+                            </div>
+                            
+                            <div style="text-align: center; margin-bottom: 15px;">
+                                <div style="display: inline-block; padding: 8px 15px; background: #fef2f2; border-radius: 6px; border: 1px solid #fecaca;">
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #dc2626;">
+                                        Message: "The quick brown fox..." (2248 bits)
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="font-size: 0.85rem; color: #4b5563; line-height: 1.5;">
+                                <strong>Process:</strong>
+                                <ol style="margin: 10px 0 0 0; padding-left: 20px;">
+                                    <li>Add padding to reach multiple of 1024</li>
+                                    <li>Split into 3 blocks (M₁, M₂, M₃)</li>
+                                    <li>Process <strong>THREE iterations</strong> of the chain</li>
+                                    <li>H₁ = H₀ + F(M₁, H₀)</li>
+                                    <li>H₂ = H₁ + F(M₂, H₁)</li>
+                                    <li>H₃ = H₂ + F(M₃, H₂)</li>
+                                </ol>
+                            </div>
+                            
+                            <div style="margin-top: 15px; padding: 10px; background: #fef2f2; border-radius: 6px; text-align: center;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #dc2626;">
+                                    H₃ = H₂ + F(M₃, H₂)
+                                </div>
+                                <div style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">
+                                    3 iterations of the chain
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- The Critical Answer -->
+                    <div style="background: linear-gradient(135deg, #059669, #10b981); border-radius: 8px; padding: 20px; color: white;">
+                        <h6 style="margin: 0 0 15px 0; font-size: 1rem; display: flex; align-items: center; gap: 10px;">
+                            <i data-feather="alert-circle" style="width: 20px; height: 20px;"></i>
+                            The Critical Answer
+                        </h6>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 6px;">
+                                <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.9rem;">When does the chain occur?</div>
+                                <div style="font-size: 0.85rem; opacity: 0.9;">
+                                    <strong>ALWAYS!</strong> The chain (Hᵢ = Hᵢ₋₁ + F(Mᵢ, Hᵢ₋₁)) happens for <strong>EVERY</strong> block.
+                                </div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 6px;">
+                                <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.9rem;">Short message scenario:</div>
+                                <div style="font-size: 0.85rem; opacity: 0.9;">
+                                    Even if message fits in one block, we still have: H₁ = H₀ + F(M₁, H₀)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 6px;">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; text-align: center; margin-bottom: 5px;">
+                                Minimum: H₁ = H₀ + F(M₁, H₀)
+                            </div>
+                            <div style="font-size: 0.8rem; opacity: 0.9; text-align: center;">
+                                At least one iteration of the chain always occurs
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Summary -->
+                    <div style="margin-top: 20px;">
+                        <h6 style="color: #065f46; margin-bottom: 15px; font-size: 0.95rem;">Visual Summary:</h6>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 15px; background: white; border-radius: 8px; border: 1px solid #bbf7d0;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.9rem; font-weight: bold; color: #1e40af; margin-bottom: 5px;">Short Message</div>
+                                <div style="font-size: 0.8rem; color: #64748b;">Message → Padding → 1 Block → H₁</div>
+                            </div>
+                            
+                            <div style="font-size: 1.5rem; color: #94a3b8;">=</div>
+                            
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.9rem; font-weight: bold; color: #b91c1c; margin-bottom: 5px;">Long Message</div>
+                                <div style="font-size: 0.8rem; color: #64748b;">Message → Padding → N Blocks → Hₙ</div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: #64748b;">
+                            <strong>Same chain logic, different number of iterations</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Takeaways -->
+            <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 12px; color: white;">
+                <h4 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+                    <i data-feather="check-circle" style="width: 20px; height: 20px;"></i>
+                    Key Takeaways
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h5 style="margin-bottom: 10px; font-size: 0.95rem; opacity: 0.9;">About H₀ (Initialization Vector)</h5>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; opacity: 0.9;">
+                            <li>Fixed 512-bit constant derived from prime numbers</li>
+                            <li>Provides starting point for hash computation</li>
+                            <li>Same across all SHA-512 implementations</li>
+                            <li>Ensures deterministic output</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom: 10px; font-size: 0.95rem; opacity: 0.9;">About Iterative Processing</h5>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; opacity: 0.9;">
+                            <li>Chain ALWAYS occurs (minimum 1 iteration)</li>
+                            <li>Number of iterations = Number of blocks</li>
+                            <li>Hᵢ = Hᵢ₋₁ + F(Mᵢ, Hᵢ₋₁) for each block</li>
+                            <li>Short messages still go through full process</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    appendContent(html);
+    feather.replace();
+}
+// NEW SECTION: COMPRESSION FUNCTION DETAILED VISUALIZATION
+function addCompressionFunctionVisualization() {
+    const html = `
+        <div class="viz-section" style="margin-top: 40px; border-top: 2px solid #f1f5f9; padding-top: 40px;">
+            
+            <div class="module-header">
+                <div class="module-title" style="color:#334155;">
+                    <i data-feather="git-merge" style="color:#ef4444;"></i> Compression Function: Detailed Flow
+                </div>
+                <div class="module-subtitle">
+                    How SHA-512 processes a 1024-bit block with the current hash state.
+                </div>
+            </div>
+
+            <!-- The Big Picture -->
+            <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">The Big Picture: F(Mᵢ, Hᵢ₋₁)</h4>
+                
+                <!-- Core Process Visualization -->
+                <div style="position: relative; padding: 20px; background: #f8fafc; border-radius: 12px; margin-bottom: 25px;">
+                    
+                    <!-- Inputs Section -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; position: relative;">
+                        <!-- Hᵢ₋₁ Input -->
+                        <div style="text-align: center;">
+                            <div style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; padding: 20px; border-radius: 10px; width: 160px; position: relative;">
+                                <div style="font-weight: bold; font-size: 1rem;">Hᵢ₋₁</div>
+                                <div style="font-size: 0.75rem; opacity: 0.9;">512-bit Input</div>
+                                <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #8b5cf6; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem;">
+                                    Current State
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.75rem; color: #64748b;">
+                                8 × 64-bit registers
+                            </div>
+                        </div>
+                        
+                        <!-- Plus Sign -->
+                        <div style="font-size: 2rem; color: #64748b; position: relative;">
+                            +
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f8fafc; padding: 0 10px; font-size: 0.8rem; color: #94a3b8;">
+                                mod 2⁶⁴
+                            </div>
+                        </div>
+                        
+                        <!-- Mᵢ Input -->
+                        <div style="text-align: center;">
+                            <div style="background: linear-gradient(135deg, #3b82f6, #0ea5e9); color: white; padding: 20px; border-radius: 10px; width: 160px; position: relative;">
+                                <div style="font-weight: bold; font-size: 1rem;">Mᵢ</div>
+                                <div style="font-size: 0.75rem; opacity: 0.9;">1024-bit Block</div>
+                                <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem;">
+                                    Message Block
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.75rem; color: #64748b;">
+                                16 × 64-bit words
+                            </div>
+                        </div>
+                        
+                        <!-- Arrow to Compression -->
+                        <div style="font-size: 2rem; color: #64748b; margin: 0 20px;">→</div>
+                        
+                        <!-- Compression Function -->
+                        <div style="text-align: center; position: relative;">
+                            <div style="background: linear-gradient(135deg, #f59e0b, #f97316); color: white; padding: 25px; border-radius: 10px; width: 180px; position: relative; z-index: 2;">
+                                <div style="font-weight: bold; font-size: 1.1rem;">F</div>
+                                <div style="font-size: 0.8rem; opacity: 0.9;">Compression Function</div>
+                            </div>
+                            <div style="position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; background: rgba(245, 158, 11, 0.1); border: 3px dashed #f59e0b; border-radius: 16px; z-index: 1;"></div>
+                            <div style="margin-top: 10px; font-size: 0.75rem; color: #64748b;">
+                                80 rounds processing
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Output Arrow -->
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div style="font-size: 2rem; color: #64748b;">↓</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8;">Output of F</div>
+                    </div>
+                    
+                    <!-- Final Output -->
+                    <div style="text-align: center;">
+                        <div style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 20px; border-radius: 10px; width: 180px; display: inline-block;">
+                            <div style="font-weight: bold; font-size: 1rem;">F(Mᵢ, Hᵢ₋₁)</div>
+                            <div style="font-size: 0.75rem; opacity: 0.9;">512-bit Output</div>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.75rem; color: #64748b;">
+                            Processed hash state
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 1: Message Schedule Generation -->
+            <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Stage 1: Message Schedule Generation</h4>
+                
+                <div style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <h5 style="color: #0369a1; margin-bottom: 15px; font-size: 1rem;">The 1024-bit block is "stretched" to provide data for 80 rounds</h5>
+                </div>
+
+                <!-- Step 1: Splitting Visualization -->
+                <div style="margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem; margin-right: 15px;">
+                            1
+                        </div>
+                        <h5 style="margin: 0; color:#1e40af; font-size: 1rem;">Splitting into 16 Words</h5>
+                    </div>
+                    
+                    <!-- Visual Block Split -->
+                    <div style="background: white; border: 3px solid #1e40af; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <div style="font-weight: bold; color: #1e40af; font-size: 0.9rem;">1024-bit Block Mᵢ</div>
+                            <div style="font-size: 0.8rem; color: #64748b;">(128 bytes)</div>
+                        </div>
+                        
+                        <!-- 16 Words Visualization -->
+                        <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-bottom: 15px;">
+                            ${Array.from({length: 16}, (_, i) => `
+                                <div style="background: #3b82f6; color: white; padding: 10px; border-radius: 6px; text-align: center; position: relative;">
+                                    <div style="font-weight: bold; font-size: 0.8rem;">W[${i}]</div>
+                                    <div style="font-size: 0.6rem; opacity: 0.9;">64 bits</div>
+                                    <div style="position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: bold;">
+                                        ${i < 10 ? i : i.toString(16)}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="text-align: center; font-size: 0.8rem; color: #64748b;">
+                            16 × 64-bit words = 1024 bits
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #475569; text-align: center;">
+                            Mᵢ = [W[0] | W[1] | W[2] | ... | W[15]]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Expansion Visualization -->
+                <div>
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="background: #10b981; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem; margin-right: 15px;">
+                            2
+                        </div>
+                        <h5 style="margin: 0; color:#047857; font-size: 1rem;">Expansion to 80 Words</h5>
+                    </div>
+                    
+                    <!-- Expansion Formula Visualization -->
+                    <div style="background: white; border: 3px solid #10b981; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #065f46; font-weight: bold;">
+                                W[t] = σ₁(W[t-2]) + W[t-7] + σ₀(W[t-15]) + W[t-16]
+                            </div>
+                            <div style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">for t = 16 to 79</div>
+                        </div>
+                        
+                        <!-- Visual Expansion Process -->
+                        <div style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px;">
+                            <!-- Initial Words -->
+                            <div style="text-align: center;">
+                                <div style="background: #3b82f6; color: white; padding: 12px; border-radius: 8px; width: 120px;">
+                                    <div style="font-weight: bold;">Initial 16</div>
+                                    <div style="font-size: 0.7rem;">W[0]-W[15]</div>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">From message block</div>
+                            </div>
+                            
+                            <!-- Arrow -->
+                            <div style="font-size: 2rem; color: #94a3b8;">→</div>
+                            
+                            <!-- Expansion Process -->
+                            <div style="text-align: center; position: relative;">
+                                <div style="background: #f59e0b; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                    <div style="font-weight: bold;">Expansion</div>
+                                    <div style="font-size: 0.7rem;">Generate 64 more</div>
+                                </div>
+                                <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #f59e0b; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem;">
+                                    σ₀, σ₁ functions
+                                </div>
+                            </div>
+                            
+                            <!-- Arrow -->
+                            <div style="font-size: 2rem; color: #94a3b8;">→</div>
+                            
+                            <!-- Final Words -->
+                            <div style="text-align: center;">
+                                <div style="background: #10b981; color: white; padding: 12px; border-radius: 8px; width: 120px;">
+                                    <div style="font-weight: bold;">Total 80</div>
+                                    <div style="font-size: 0.7rem;">W[0]-W[79]</div>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">One for each round</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Example Generation -->
+                        <div style="background: #f0fdf4; padding: 15px; border-radius: 6px; border: 1px solid #86efac;">
+                            <div style="text-align: center; font-weight: bold; color: #065f46; margin-bottom: 10px; font-size: 0.9rem;">Example: Generating W[16]</div>
+                            <div style="display: flex; justify-content: space-around; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #475569;">
+                                <div style="text-align: center;">
+                                    <div>W[14]</div>
+                                    <div style="color: #64748b; font-size: 0.7rem;">(t-2)</div>
+                                </div>
+                                <div style="color: #f59e0b;">σ₁</div>
+                                <div style="text-align: center;">
+                                    <div>W[9]</div>
+                                    <div style="color: #64748b; font-size: 0.7rem;">(t-7)</div>
+                                </div>
+                                <div>+</div>
+                                <div style="text-align: center;">
+                                    <div>W[1]</div>
+                                    <div style="color: #64748b; font-size: 0.7rem;">(t-15)</div>
+                                </div>
+                                <div style="color: #f59e0b;">σ₀</div>
+                                <div style="text-align: center;">
+                                    <div>W[0]</div>
+                                    <div style="color: #64748b; font-size: 0.7rem;">(t-16)</div>
+                                </div>
+                                <div>=</div>
+                                <div style="text-align: center; color: #10b981; font-weight: bold;">
+                                    W[16]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 2: Hᵢ₋₁ Loading and Round Processing -->
+            <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Stage 2: Hᵢ₋₁ Loading and 80 Rounds Processing</h4>
+                
+                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <h5 style="color: #92400e; margin-bottom: 15px; font-size: 1rem;">Hᵢ₋₁ provides the current state, W[t] provides message data for each round</h5>
+                </div>
+
+                <!-- Hᵢ₋₁ Loading Visualization -->
+                <div style="margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="background: #8b5cf6; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem; margin-right: 15px;">
+                            1
+                        </div>
+                        <h5 style="margin: 0; color:#5b21b6; font-size: 1rem;">Loading Hᵢ₋₁ into Registers</h5>
+                    </div>
+                    
+                    <!-- 8 Registers Visualization -->
+                    <div style="background: white; border: 3px solid #8b5cf6; border-radius: 8px; padding: 20px;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="font-weight: bold; color: #5b21b6; font-size: 0.9rem;">512-bit Hᵢ₋₁ Loaded into 8 Registers</div>
+                            <div style="font-size: 0.8rem; color: #64748b;">Each register = 64 bits</div>
+                        </div>
+                        
+                        <!-- Registers Grid -->
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
+                            ${['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map((reg, index) => {
+                                const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#14b8a6'];
+                                return `
+                                    <div style="background: ${colors[index]}; color: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                        <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">${reg}</div>
+                                        <div style="font-size: 0.7rem; opacity: 0.9;">Register ${index + 1}</div>
+                                        <div style="margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; background: rgba(255,255,255,0.2); padding: 4px; border-radius: 4px;">
+                                            ${Array.from({length: 8}, () => Math.floor(Math.random() * 16).toString(16)).join('')}...
+                                        </div>
+                                        <div style="font-size: 0.6rem; margin-top: 5px;">64 bits</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <div style="text-align: center; font-size: 0.8rem; color: #64748b;">
+                            8 registers × 64 bits = 512 bits = Hᵢ₋₁
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 80 Rounds Processing -->
+                <div>
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="background: #ef4444; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem; margin-right: 15px;">
+                            2
+                        </div>
+                        <h5 style="margin: 0; color:#b91c1c; font-size: 1rem;">80 Rounds Processing</h5>
+                    </div>
+                    
+                    <!-- Round Visualization -->
+                    <div style="background: white; border: 3px solid #ef4444; border-radius: 8px; padding: 20px;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="font-weight: bold; color: #b91c1c; font-size: 0.9rem;">Each Round t (0 to 79) Processes:</div>
+                        </div>
+                        
+                        <!-- Round Inputs -->
+                        <div style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px;">
+                            <!-- Current Registers -->
+                            <div style="text-align: center;">
+                                <div style="background: #8b5cf6; color: white; padding: 12px; border-radius: 8px; width: 140px;">
+                                    <div style="font-weight: bold;">Registers a-h</div>
+                                    <div style="font-size: 0.7rem;">Current State</div>
+                                </div>
+                            </div>
+                            
+                            <div style="font-size: 1.5rem; color: #94a3b8;">+</div>
+                            
+                            <!-- Message Word -->
+                            <div style="text-align: center;">
+                                <div style="background: #3b82f6; color: white; padding: 12px; border-radius: 8px; width: 140px;">
+                                    <div style="font-weight: bold;">W[t]</div>
+                                    <div style="font-size: 0.7rem;">Message Word</div>
+                                </div>
+                            </div>
+                            
+                            <div style="font-size: 1.5rem; color: #94a3b8;">+</div>
+                            
+                            <!-- Round Constant -->
+                            <div style="text-align: center;">
+                                <div style="background: #f59e0b; color: white; padding: 12px; border-radius: 8px; width: 140px;">
+                                    <div style="font-weight: bold;">K[t]</div>
+                                    <div style="font-size: 0.7rem;">Round Constant</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Round Logic Visualization -->
+                        <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                            <div style="text-align: center; font-weight: bold; color: #334155; margin-bottom: 15px; font-size: 0.9rem;">Round t Logic</div>
+                            
+                            <!-- T1 and T2 Calculation -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                                <div style="background: white; padding: 15px; border-radius: 6px; border: 2px solid #0ea5e9;">
+                                    <div style="font-weight: bold; color: #0369a1; margin-bottom: 8px; font-size: 0.8rem;">T₁ Calculation</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #0c4a6e;">
+                                        T₁ = h + Ch(e,f,g) + Σ₁(e) + W[t] + K[t]
+                                    </div>
+                                </div>
+                                <div style="background: white; padding: 15px; border-radius: 6px; border: 2px solid #10b981;">
+                                    <div style="font-weight: bold; color: #047857; margin-bottom: 8px; font-size: 0.8rem;">T₂ Calculation</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #065f46;">
+                                        T₂ = Σ₀(a) + Maj(a,b,c)
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Register Updates -->
+                            <div style="background: white; padding: 15px; border-radius: 6px; border: 2px solid #f59e0b;">
+                                <div style="font-weight: bold; color: #b45309; margin-bottom: 10px; font-size: 0.8rem;">Register Updates:</div>
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #92400e; text-align: center;">
+                                    h = g, g = f, f = e, e = d + T₁<br>
+                                    d = c, c = b, b = a, a = T₁ + T₂
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Round Progression -->
+                        <div style="text-align: center;">
+                            <div style="display: inline-flex; align-items: center; background: #f8fafc; padding: 10px 20px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <div style="font-weight: bold; color: #334155; margin-right: 10px;">Round Progression:</div>
+                                <div style="display: flex; gap: 5px;">
+                                    ${Array.from({length: 10}, (_, i) => `
+                                        <div style="width: 8px; height: 8px; border-radius: 50%; background: ${i === 0 ? '#ef4444' : '#cbd5e1'};"></div>
+                                    `).join('')}
+                                    <div style="color: #94a3b8; font-size: 0.8rem; margin-left: 5px;">0...79</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 3: Final Addition (Feed-Forward) -->
+            <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Stage 3: Final Addition (Feed-Forward)</h4>
+                
+                <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <h5 style="color: #047857; margin-bottom: 15px; font-size: 1rem;">The processed state is combined with the original state</h5>
+                </div>
+
+                <!-- Feed-Forward Visualization -->
+                <div style="position: relative; padding: 20px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 12px;">
+                    
+                    <!-- Original Hᵢ₋₁ Bypass -->
+                    <div style="position: absolute; top: 30px; right: 30px; width: 200px;">
+                        <div style="background: rgba(139, 92, 246, 0.1); border: 2px dashed #8b5cf6; border-radius: 8px; padding: 15px; text-align: center;">
+                            <div style="font-weight: bold; color: #5b21b6; font-size: 0.9rem;">BYPASS LINE</div>
+                            <div style="font-size: 0.7rem; color: #64748b;">Original Hᵢ₋₁</div>
+                        </div>
+                        <div style="height: 150px; border-right: 2px dashed #8b5cf6; margin: 10px auto 0; width: 2px;"></div>
+                    </div>
+
+                    <!-- Final Addition Process -->
+                    <div style="max-width: 600px; margin: 0 auto;">
+                        <!-- Final Registers -->
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <div style="background: #f59e0b; color: white; padding: 20px; border-radius: 10px; display: inline-block;">
+                                <div style="font-weight: bold; font-size: 1rem;">Final Registers</div>
+                                <div style="font-size: 0.75rem; opacity: 0.9;">After 80 rounds</div>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">
+                                New a-h values from processing
+                            </div>
+                        </div>
+                        
+                        <!-- Addition Arrows -->
+                        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px;">
+                            <div style="text-align: center; margin-right: 40px;">
+                                <div style="font-size: 2rem; color: #3b82f6;">+</div>
+                                <div style="font-size: 0.7rem; color: #64748b;">mod 2⁶⁴</div>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; color: #8b5cf6;">=</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Original Hᵢ₋₁ -->
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <div style="background: #8b5cf6; color: white; padding: 20px; border-radius: 10px; display: inline-block;">
+                                <div style="font-weight: bold; font-size: 1rem;">Original Hᵢ₋₁</div>
+                                <div style="font-size: 0.75rem; opacity: 0.9;">From bypass line</div>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">
+                                Original register values
+                            </div>
+                        </div>
+                        
+                        <!-- Final Result -->
+                        <div style="text-align: center;">
+                            <div style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 25px; border-radius: 10px; display: inline-block;">
+                                <div style="font-weight: bold; font-size: 1.1rem;">Hᵢ = Hᵢ₋₁ + F(Mᵢ, Hᵢ₋₁)</div>
+                                <div style="font-size: 0.8rem; opacity: 0.9;">New Intermediate Hash</div>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">
+                                512-bit result for next block or final output
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Visual Explanation -->
+                    <div style="margin-top: 30px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #e2e8f0;">
+                        <div style="font-weight: bold; color: #334155; margin-bottom: 10px; font-size: 0.9rem;">Why Feed-Forward?</div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; font-size: 0.85rem;">
+                            <div style="color: #4b5563;">
+                                <strong>Security:</strong> Prevents certain attacks by mixing original and processed states
+                            </div>
+                            <div style="color: #4b5563;">
+                                <strong>Avalanche:</strong> Small changes affect final result more dramatically
+                            </div>
+                            <div style="color: #4b5563;">
+                                <strong>Chaining:</strong> Each block's result depends on previous state
+                            </div>
+                            <div style="color: #4b5563;">
+                                <strong>Irreversibility:</strong> Makes hash function one-way
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complete Flow Summary -->
+            <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #1e40af, #3b82f6); border-radius: 12px; color: white;">
+                <h4 style="margin-top: 0; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+                    <i data-feather="check-circle" style="width: 20px; height: 20px;"></i>
+                    Complete Flow Summary
+                </h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.9rem;">Stage 1</div>
+                        <div style="font-size: 0.8rem; opacity: 0.9;">
+                            1024-bit → 16 words → Expand to 80 words → Message Schedule Ready
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.9rem;">Stage 2</div>
+                        <div style="font-size: 0.8rem; opacity: 0.9;">
+                            Hᵢ₋₁ → Load registers → 80 rounds (W[t] + K[t]) → Process registers
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                        <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.9rem;">Stage 3</div>
+                        <div style="font-size: 0.8rem; opacity: 0.9;">
+                            Processed registers + Original Hᵢ₋₁ → Hᵢ (new hash)
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; font-size: 0.9rem; opacity: 0.9;">
+                    F(Mᵢ, Hᵢ₋₁) = Hᵢ₋₁ + Compression(MessageSchedule + 80 Rounds)
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    appendContent(html);
+    feather.replace();
+}
+// NEW SECTION: INSIGHTS - SHA-512 LOGICAL FUNCTIONS
+function addLogicalFunctionsInsight() {
+    const html = `
+        <div class="viz-section" style="margin-top: 40px; border-top: 2px solid #f1f5f9; padding-top: 40px;">
+            
+            <div class="module-header">
+                <div class="module-title" style="color:#334155;">
+                    <i data-feather="cpu" style="color:#8b5cf6;"></i> Inside the Compression Function: Logical Operations
+                </div>
+                <div class="module-subtitle">
+                    Understanding the four core logical functions that drive SHA-512's security and avalanche effect.
+                </div>
+            </div>
+
+            <!-- Overview Box -->
+            <div style="background: #f8fafc; border-left: 4px solid #8b5cf6; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                <p style="margin:0; color:#4b5563; font-size:0.95rem;">
+                    The SHA-512 compression function uses <strong>four key logical functions</strong> that are applied 
+                    during each of the 80 rounds. These functions work on 64-bit words and provide the cryptographic 
+                    strength and diffusion properties that make SHA-512 secure.
+                </p>
+            </div>
+
+            <!-- Four Functions Grid -->
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+                
+                <!-- Choice (Ch) Function -->
+                <div style="background: white; border: 2px solid #3b82f6; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #3b82f6; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem;">
+                            Ch
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; color:#1e40af; font-size: 1.1rem;">Choice Function</h4>
+                            <div style="font-size: 0.8rem; color: #64748b;">Conditional selection between two words</div>
+                        </div>
+                    </div>
+
+                    <!-- Formula -->
+                    <div style="background: #eff6ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #bfdbfe;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #1e40af; text-align: center;">
+                            Ch(e, f, g) = (e ∧ f) ⊕ (¬e ∧ g)
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; text-align: center; margin-top: 5px;">
+                            e, f, g are 64-bit words
+                        </div>
+                    </div>
+
+                    <!-- How it works -->
+                    <div style="margin-bottom: 15px;">
+                        <h5 style="color: #334155; margin-bottom: 10px; font-size: 0.95rem;">How it works:</h5>
+                        <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.5; margin: 0 0 10px 0;">
+                            For each bit position (0-63):
+                        </p>
+                        <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.5; margin: 0; padding-left: 20px;">
+                            <li>If e's bit = 1, choose f's bit</li>
+                            <li>If e's bit = 0, choose g's bit</li>
+                            <li>Result is f or g depending on e</li>
+                        </ul>
+                    </div>
+
+                    <!-- Visualization -->
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 1px solid #e0f2fe;">
+                        <h6 style="color: #0369a1; margin-bottom: 10px; font-size: 0.85rem;">Bit-Level Example:</h6>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e;">
+                            e = 1011 0010<br>
+                            f = 1100 1101<br>
+                            g = 0110 1001<br>
+                            Ch = 1100 1001  (chooses f when e=1, g when e=0)
+                        </div>
+                    </div>
+
+                    <!-- Purpose -->
+                    <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 6px; color: white;">
+                        <div style="font-weight: bold; margin-bottom: 5px; font-size: 0.8rem;">Purpose in SHA-512:</div>
+                        <div style="font-size: 0.75rem; opacity: 0.9;">
+                            Provides non-linearity and data-dependent behavior (makes cryptanalysis harder)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Majority (Maj) Function -->
+                <div style="background: white; border: 2px solid #10b981; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #10b981; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem;">
+                            Maj
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; color:#047857; font-size: 1.1rem;">Majority Function</h4>
+                            <div style="font-size: 0.8rem; color: #64748b;">Bit-wise majority vote among three words</div>
+                        </div>
+                    </div>
+
+                    <!-- Formula -->
+                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #bbf7d0;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #047857; text-align: center;">
+                            Maj(a, b, c) = (a ∧ b) ⊕ (a ∧ c) ⊕ (b ∧ c)
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; text-align: center; margin-top: 5px;">
+                            a, b, c are 64-bit words
+                        </div>
+                    </div>
+
+                    <!-- How it works -->
+                    <div style="margin-bottom: 15px;">
+                        <h5 style="color: #334155; margin-bottom: 10px; font-size: 0.95rem;">How it works:</h5>
+                        <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.5; margin: 0 0 10px 0;">
+                            For each bit position (0-63):
+                        </p>
+                        <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.5; margin: 0; padding-left: 20px;">
+                            <li>Count 1s among a, b, c bits</li>
+                            <li>If ≥2 bits are 1, output 1</li>
+                            <li>If ≤1 bits are 1, output 0</li>
+                        </ul>
+                    </div>
+
+                    <!-- Visualization -->
+                    <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; border: 1px solid #bbf7d0;">
+                        <h6 style="color: #065f46; margin-bottom: 10px; font-size: 0.85rem;">Bit-Level Example:</h6>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #065f46;">
+                            a = 1011 0010<br>
+                            b = 1100 1101<br>
+                            c = 0110 1001<br>
+                            Maj = 1110 1001  (output 1 where ≥2 inputs are 1)
+                        </div>
+                    </div>
+
+                    <!-- Purpose -->
+                    <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 6px; color: white;">
+                        <div style="font-weight: bold; margin-bottom: 5px; font-size: 0.8rem;">Purpose in SHA-512:</div>
+                        <div style="font-size: 0.75rem; opacity: 0.9;">
+                            Provides bit diffusion and mixing across registers a, b, c
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Σ₀ (Sigma 0) Function -->
+                <div style="background: white; border: 2px solid #f59e0b; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #f59e0b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem;">
+                            Σ₀
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; color:#b45309; font-size: 1.1rem;">Sigma 0 Function</h4>
+                            <div style="font-size: 0.8rem; color: #64748b;">Bit rotation and XOR combination for register a</div>
+                        </div>
+                    </div>
+
+                    <!-- Formula -->
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #fcd34d;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #92400e; text-align: center;">
+                            Σ₀(a) = ROTR²⁸(a) ⊕ ROTR³⁴(a) ⊕ ROTR³⁹(a)
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; text-align: center; margin-top: 5px;">
+                            ROTRⁿ = Right rotate by n bits
+                        </div>
+                    </div>
+
+                    <!-- How it works -->
+                    <div style="margin-bottom: 15px;">
+                        <h5 style="color: #334155; margin-bottom: 10px; font-size: 0.95rem;">How it works:</h5>
+                        <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.5; margin: 0 0 10px 0;">
+                            Takes the 64-bit word a and:
+                        </p>
+                        <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.5; margin: 0; padding-left: 20px;">
+                            <li>Right rotates a by 28 bits</li>
+                            <li>Right rotates a by 34 bits</li>
+                            <li>Right rotates a by 39 bits</li>
+                            <li>XORs all three results together</li>
+                        </ul>
+                    </div>
+
+                    <!-- Visualization -->
+                    <div style="background: #fef3c7; padding: 15px; border-radius: 8px; border: 1px solid #fcd34d;">
+                        <h6 style="color: #92400e; margin-bottom: 10px; font-size: 0.85rem;">Rotation Visualization:</h6>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #78350f;">
+                            a = ABCDEFGH (64 bits)<br>
+                            ROTR²⁸ = HABCDEFG<br>
+                            ROTR³⁴ = GABCDEFH<br>
+                            ROTR³⁹ = FGABCDEH<br>
+                            Σ₀ = XOR of all three
+                        </div>
+                    </div>
+
+                    <!-- Purpose -->
+                    <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 6px; color: white;">
+                        <div style="font-weight: bold; margin-bottom: 5px; font-size: 0.8rem;">Purpose in SHA-512:</div>
+                        <div style="font-size: 0.75rem; opacity: 0.9;">
+                            Mixes bits within register a, providing diffusion and breaking bit patterns
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Σ₁ (Sigma 1) Function -->
+                <div style="background: white; border: 2px solid #ef4444; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #ef4444; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem;">
+                            Σ₁
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; color:#b91c1c; font-size: 1.1rem;">Sigma 1 Function</h4>
+                            <div style="font-size: 0.8rem; color: #64748b;">Bit rotation and XOR combination for register e</div>
+                        </div>
+                    </div>
+
+                    <!-- Formula -->
+                    <div style="background: #fef2f2; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #fecaca;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #dc2626; text-align: center;">
+                            Σ₁(e) = ROTR¹⁴(e) ⊕ ROTR¹⁸(e) ⊕ ROTR⁴¹(e)
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; text-align: center; margin-top: 5px;">
+                            Note: Different rotation constants than Σ₀
+                        </div>
+                    </div>
+
+                    <!-- How it works -->
+                    <div style="margin-bottom: 15px;">
+                        <h5 style="color: #334155; margin-bottom: 10px; font-size: 0.95rem;">How it works:</h5>
+                        <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.5; margin: 0 0 10px 0;">
+                            Takes the 64-bit word e and:
+                        </p>
+                        <ul style="color: #4b5563; font-size: 0.9rem; line-height: 1.5; margin: 0; padding-left: 20px;">
+                            <li>Right rotates e by 14 bits</li>
+                            <li>Right rotates e by 18 bits</li>
+                            <li>Right rotates e by 41 bits</li>
+                            <li>XORs all three results together</li>
+                        </ul>
+                    </div>
+
+                    <!-- Visualization -->
+                    <div style="background: #fef2f2; padding: 15px; border-radius: 8px; border: 1px solid #fecaca;">
+                        <h6 style="color: #dc2626; margin-bottom: 10px; font-size: 0.85rem;">Rotation Visualization:</h6>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #991b1b;">
+                            e = 0123456789ABCDEF (hex)<br>
+                            ROTR¹⁴ = F0123456789ABCDE<br>
+                            ROTR¹⁸ = EF0123456789ABCD<br>
+                            ROTR⁴¹ = BCDEF0123456789A<br>
+                            Σ₁ = XOR of all three
+                        </div>
+                    </div>
+
+                    <!-- Purpose -->
+                    <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 6px; color: white;">
+                        <div style="font-weight: bold; margin-bottom: 5px; font-size: 0.8rem;">Purpose in SHA-512:</div>
+                        <div style="font-size: 0.75rem; opacity: 0.9;">
+                            Mixes bits within register e, working with Ch() to compute T₁ in each round
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- How They Work Together -->
+            <div style="background: white; border: 2px solid #8b5cf6; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">How These Functions Work Together in Each Round</h4>
+                
+                <!-- Round Calculation Visualization -->
+                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #475569; font-weight: bold;">
+                            T₁ = h + Ch(e,f,g) + Σ₁(e) + W[t] + K[t]
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">Computed in every round (t = 0 to 79)</div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #475569; font-weight: bold;">
+                            T₂ = Σ₀(a) + Maj(a,b,c)
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #8b5cf6; font-weight: bold;">
+                            New a = T₁ + T₂
+                        </div>
+                        <div style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">Other registers shift: h→g, g→f, etc.</div>
+                    </div>
+                </div>
+
+                <!-- Visual Flow -->
+                <div style="position: relative; padding: 20px; background: white; border-radius: 8px; border: 2px dashed #cbd5e1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <!-- Inputs -->
+                        <div style="text-align: center; width: 100px;">
+                            <div style="background: #3b82f6; color: white; padding: 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 5px;">
+                                Registers<br>a-h
+                            </div>
+                            <div style="font-size: 0.7rem; color: #64748b;">Current state</div>
+                        </div>
+                        
+                        <div style="font-size: 1.5rem; color: #94a3b8;">+</div>
+                        
+                        <div style="text-align: center; width: 100px;">
+                            <div style="background: #10b981; color: white; padding: 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 5px;">
+                                W[t]
+                            </div>
+                            <div style="font-size: 0.7rem; color: #64748b;">Message word</div>
+                        </div>
+                        
+                        <div style="font-size: 1.5rem; color: #94a3b8;">+</div>
+                        
+                        <div style="text-align: center; width: 100px;">
+                            <div style="background: #f59e0b; color: white; padding: 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 5px;">
+                                K[t]
+                            </div>
+                            <div style="font-size: 0.7rem; color: #64748b;">Constant</div>
+                        </div>
+                        
+                        <div style="font-size: 1.5rem; color: #94a3b8;">→</div>
+                        
+                        <!-- Functions Box -->
+                        <div style="text-align: center; position: relative;">
+                            <div style="background: #8b5cf6; color: white; padding: 20px; border-radius: 10px; width: 200px;">
+                                <div style="font-weight: bold; font-size: 1rem;">Apply Functions</div>
+                                <div style="font-size: 0.7rem; margin-top: 5px;">Ch, Maj, Σ₀, Σ₁</div>
+                            </div>
+                            <div style="position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; border: 3px dashed #8b5cf6; border-radius: 16px;"></div>
+                        </div>
+                        
+                        <div style="font-size: 1.5rem; color: #94a3b8;">→</div>
+                        
+                        <!-- Output -->
+                        <div style="text-align: center; width: 100px;">
+                            <div style="background: #ef4444; color: white; padding: 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 5px;">
+                                New a-h
+                            </div>
+                            <div style="font-size: 0.7rem; color: #64748b;">Updated state</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Functions Inside -->
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div style="display: inline-flex; gap: 10px; background: #f1f5f9; padding: 10px; border-radius: 6px;">
+                            <div style="padding: 8px 12px; background: #3b82f6; color: white; border-radius: 4px; font-size: 0.8rem;">Ch()</div>
+                            <div style="padding: 8px 12px; background: #10b981; color: white; border-radius: 4px; font-size: 0.8rem;">Maj()</div>
+                            <div style="padding: 8px 12px; background: #f59e0b; color: white; border-radius: 4px; font-size: 0.8rem;">Σ₀()</div>
+                            <div style="padding: 8px 12px; background: #ef4444; color: white; border-radius: 4px; font-size: 0.8rem;">Σ₁()</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation -->
+                <div style="margin-top: 25px;">
+                    <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Why This Combination is Powerful:</h5>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div style="padding: 15px; background: #eff6ff; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <div style="font-weight: bold; color: #1e40af; margin-bottom: 8px; font-size: 0.9rem;">Non-Linearity</div>
+                            <div style="font-size: 0.85rem; color: #4b5563;">
+                                Ch() and Maj() are non-linear functions that prevent linear cryptanalysis.
+                            </div>
+                        </div>
+                        <div style="padding: 15px; background: #f0fdf4; border-radius: 8px; border-left: 4px solid #10b981;">
+                            <div style="font-weight: bold; color: #047857; margin-bottom: 8px; font-size: 0.9rem;">Bit Diffusion</div>
+                            <div style="font-size: 0.85rem; color: #4b5563;">
+                                Σ₀() and Σ₁() spread bits across word positions (avalanche effect).
+                            </div>
+                        </div>
+                        <div style="padding: 15px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <div style="font-weight: bold; color: #b45309; margin-bottom: 8px; font-size: 0.9rem;">Register Interaction</div>
+                            <div style="font-size: 0.85rem; color: #4b5563;">
+                                Functions connect different registers, creating complex dependencies.
+                            </div>
+                        </div>
+                        <div style="padding: 15px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #ef4444;">
+                            <div style="font-weight: bold; color: #dc2626; margin-bottom: 8px; font-size: 0.9rem;">Parallel Computation</div>
+                            <div style="font-size: 0.85rem; color: #4b5563;">
+                                T₁ and T₂ can be computed in parallel, optimizing hardware implementations.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Impact -->
+            <div style="background: linear-gradient(135deg, #1e40af, #3b82f6); border-radius: 12px; padding: 25px; color: white; margin-bottom: 30px;">
+                <h4 style="margin-top: 0; margin-bottom: 20px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+                    <i data-feather="shield" style="width: 20px; height: 20px;"></i>
+                    Security Impact of These Functions
+                </h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div>
+                        <h5 style="margin-bottom: 10px; font-size: 0.95rem; opacity: 0.9;">Cryptographic Strength</h5>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; opacity: 0.9;">
+                            <li><strong>Ch()</strong>: Data-dependent, breaks linearity</li>
+                            <li><strong>Maj()</strong>: Balances influence of three registers</li>
+                            <li><strong>Σ₀(), Σ₁()</strong>: Ensure bit diffusion across rounds</li>
+                            <li><strong>Combination</strong>: Resists differential and linear attacks</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 style="margin-bottom: 10px; font-size: 0.95rem; opacity: 0.9;">Performance & Design</h5>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; opacity: 0.9;">
+                            <li>All operations on 64-bit words (optimized for 64-bit CPUs)</li>
+                            <li>Only uses AND, XOR, NOT, and rotations (efficient in hardware)</li>
+                            <li>80 rounds provide sufficient mixing for 512-bit security</li>
+                            <li>Design allows pipelining in hardware implementations</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                    <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.9rem;">Key Insight:</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">
+                        The combination of these four simple functions, applied over 80 rounds, creates a cryptographic 
+                        transformation so complex that it's practically impossible to reverse or find collisions, 
+                        while remaining efficient to compute in the forward direction.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Example -->
+            <div style="background: white; border: 2px solid #10b981; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Interactive Example: See the Functions in Action</h4>
+                
+                <div style="margin-bottom: 25px;">
+                    <p style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">
+                        Enter 8-bit values (for simplicity) to see how each function transforms the input:
+                    </p>
+                    
+                    <!-- Input Controls -->
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 5px;">Input a (binary):</label>
+                            <input type="text" id="input-a" value="10110010" maxlength="8" 
+                                   style="width: 100%; padding: 8px; border: 2px solid #3b82f6; border-radius: 6px; font-family: 'JetBrains Mono'; font-size: 0.9rem;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 5px;">Input b (binary):</label>
+                            <input type="text" id="input-b" value="11001101" maxlength="8" 
+                                   style="width: 100%; padding: 8px; border: 2px solid #10b981; border-radius: 6px; font-family: 'JetBrains Mono'; font-size: 0.9rem;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 5px;">Input c (binary):</label>
+                            <input type="text" id="input-c" value="01101001" maxlength="8" 
+                                   style="width: 100%; padding: 8px; border: 2px solid #f59e0b; border-radius: 6px; font-family: 'JetBrains Mono'; font-size: 0.9rem;">
+                        </div>
+                        <div style="display: flex; align-items: flex-end;">
+                            <button onclick="calculateLogicalFunctions()" style="background: #8b5cf6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; width: 100%;">
+                                Calculate Functions
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Results Display -->
+                    <div id="function-results" style="display: none;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                            <div style="padding: 15px; background: #eff6ff; border-radius: 8px; border: 2px solid #3b82f6;">
+                                <div style="font-weight: bold; color: #1e40af; margin-bottom: 10px; font-size: 0.9rem;">Ch(b, c, a)</div>
+                                <div id="ch-result" style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #1e40af;">-</div>
+                            </div>
+                            <div style="padding: 15px; background: #f0fdf4; border-radius: 8px; border: 2px solid #10b981;">
+                                <div style="font-weight: bold; color: #047857; margin-bottom: 10px; font-size: 0.9rem;">Maj(a, b, c)</div>
+                                <div id="maj-result" style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #047857;">-</div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">Note: Σ₀ and Σ₁ require rotation operations that are difficult to show with 8-bit examples.</div>
+                            <div style="font-size: 0.8rem; color: #8b5cf6;">
+                                In SHA-512, these functions work on 64-bit words with specific rotation amounts.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reset Button -->
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button onclick="resetFunctionExample()" id="reset-func-btn" style="background: #64748b; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: none;">
+                            Reset Example
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="padding: 15px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                    <h5 style="color: #92400e; margin-bottom: 10px; font-size: 0.95rem;">Learning Point:</h5>
+                    <p style="color: #78350f; font-size: 0.9rem; margin: 0;">
+                        These four functions may seem simple individually, but when combined over 80 rounds with 
+                        64-bit words, they create an incredibly complex transformation that's easy to compute in one 
+                        direction but virtually impossible to reverse.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    // Inject styles for this section
+    const style = document.createElement('style');
+    style.innerHTML = `
+        input:focus {
+            outline: none;
+            border-color: #8b5cf6 !important;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+    `;
+    document.head.appendChild(style);
+
+    appendContent(html);
+    feather.replace();
+}
+
+// Helper function for the interactive example
+window.calculateLogicalFunctions = function() {
+    // Get inputs
+    const a = document.getElementById('input-a').value;
+    const b = document.getElementById('input-b').value;
+    const c = document.getElementById('input-c').value;
     
-    // Create a simple hash for demo (not cryptographically secure)
-    let hash = '0x';
-    for (let i = 0; i < 128; i++) { // 128 hex chars = 512 bits
-        hash += Math.floor(Math.random() * 16).toString(16);
+    // Validate inputs are 8-bit binary
+    const binaryRegex = /^[01]{8}$/;
+    if (!binaryRegex.test(a) || !binaryRegex.test(b) || !binaryRegex.test(c)) {
+        alert("Please enter valid 8-bit binary values (8 characters, only 0s and 1s)");
+        return;
     }
     
-    // For known inputs, return known SHA-512 hashes
-    const knownHashes = {
-        '': 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce' +
-            '47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e',
-        'abc': 'ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a' +
-               '2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f',
-        'The quick brown fox jumps over the lazy dog': 
-               '07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb64' +
-               '2e93a252a954f23912547d1e8a3b5ed6e1bfd7097821233fa0538f3db854fee6'
-    };
+    // Convert binary strings to arrays of bits
+    const aBits = a.split('').map(bit => parseInt(bit));
+    const bBits = b.split('').map(bit => parseInt(bit));
+    const cBits = c.split('').map(bit => parseInt(bit));
     
-    return knownHashes[input] || hash.substring(2); // Remove 0x prefix
-}
+    // Calculate Ch(b, c, a) - Note: using b as selector between c and a
+    let chResult = '';
+    for (let i = 0; i < 8; i++) {
+        if (bBits[i] === 1) {
+            chResult += cBits[i];
+        } else {
+            chResult += aBits[i];
+        }
+    }
+    
+    // Calculate Maj(a, b, c)
+    let majResult = '';
+    for (let i = 0; i < 8; i++) {
+        const sum = aBits[i] + bBits[i] + cBits[i];
+        majResult += (sum >= 2) ? '1' : '0';
+    }
+    
+    // Display results
+    document.getElementById('ch-result').textContent = chResult;
+    document.getElementById('maj-result').textContent = majResult;
+    document.getElementById('function-results').style.display = 'block';
+    document.getElementById('reset-func-btn').style.display = 'inline-block';
+    
+    // Highlight the differences
+    setTimeout(() => {
+        document.getElementById('ch-result').style.color = '#ef4444';
+        document.getElementById('maj-result').style.color = '#10b981';
+        
+        setTimeout(() => {
+            document.getElementById('ch-result').style.color = '#1e40af';
+            document.getElementById('maj-result').style.color = '#047857';
+        }, 1000);
+    }, 100);
+};
+
+window.resetFunctionExample = function() {
+    document.getElementById('input-a').value = '10110010';
+    document.getElementById('input-b').value = '11001101';
+    document.getElementById('input-c').value = '01101001';
+    document.getElementById('function-results').style.display = 'none';
+    document.getElementById('reset-func-btn').style.display = 'none';
+};
