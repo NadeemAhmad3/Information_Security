@@ -170,3 +170,24 @@ header h1 { font-size: 1.5rem; color: var(--secondary); }
 .progress-bar { height: 100%; background: var(--primary); border-radius: 3px; }
 
 .meta-row { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+/* Add these styles to your existing style.css file */
+
+/* Ensure the main content takes full height */
+.main-content {
+    min-height: 100vh;
+}
+
+/* Make sure dashboard grid works properly */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    padding: 24px;
+}
+
+/* Input focus states */
+input:focus {
+    outline: none;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
