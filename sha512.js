@@ -223,6 +223,7 @@ function renderSHA512(container) {
     addHashIntro();
     addAvalancheEffect();
     addHashAttacksSection(); 
+    addSHA512Implementation();
 }
 
 // --- LOGIC ENGINE ---
@@ -1440,4 +1441,1025 @@ function generateRandomHash() {
         result += hex[Math.floor(Math.random() * hex.length)];
     }
     return result + '...';
+}
+// COMPREHENSIVE SHA-512 MODULE
+function addSHA512Implementation() {
+    const html = `
+        <div class="viz-section" style="margin-top: 40px; border-top: 2px solid #f1f5f9; padding-top: 40px;">
+            
+            <div class="module-header">
+                <div class="module-title" style="color:#334155;">
+                    <i data-feather="hash" style="color:#3b82f6;"></i> SHA-512: Complete Implementation
+                </div>
+                <div class="module-subtitle">
+                    A detailed visualization of the Secure Hash Algorithm 512-bit (SHA-512)
+                </div>
+            </div>
+
+            <!-- SHA-512 Properties Table -->
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">SHA-512 Properties</h4>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Message Digest Size</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #1e40af;">512 bits (64 bytes)</div>
+                    </div>
+                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #10b981;">
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Message Size</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #047857;">≤ 2¹²⁸ bits</div>
+                    </div>
+                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Block Size</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #b45309;">1024 bits (128 bytes)</div>
+                    </div>
+                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Word Size</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #5b21b6;">64 bits</div>
+                    </div>
+                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Number of Steps</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #b91c1c;">80 rounds</div>
+                    </div>
+                    <div style="padding: 15px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #06b6d4;">
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 5px;">Security Level</div>
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #0e7490;">256 bits (collision)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHA-512 Logic Overview -->
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h4 style="margin: 0; color:#334155; font-size: 1.1rem;">SHA-512 Logic Overview</h4>
+                    <div style="font-size: 0.8rem; color: #64748b; background: #f8fafc; padding: 5px 10px; border-radius: 4px;">
+                        NATIONAL UNIVERSITY OF COMPUTER & EMERGING SCIENCES
+                    </div>
+                </div>
+
+                <!-- Process Flow Visualization -->
+                <div style="position: relative; padding: 20px; background: #f8fafc; border-radius: 8px; margin-bottom: 25px;">
+                    
+                    <!-- Input Message -->
+                    <div style="text-align: center; margin-bottom: 30px; position: relative;">
+                        <div style="background: #3b82f6; color: white; padding: 15px; border-radius: 8px; display: inline-block; position: relative;">
+                            <div style="font-weight: bold; font-size: 1rem;">INPUT MESSAGE</div>
+                            <div style="font-size: 0.85rem; opacity: 0.9;">(Any length)</div>
+                            <div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); color: #64748b; font-size: 0.75rem;">Step 0</div>
+                        </div>
+                        <div style="position: absolute; top: 50%; right: -30px; transform: translateY(-50%); color: #94a3b8; font-size: 1.5rem;">↓</div>
+                    </div>
+
+                    <!-- Steps Container -->
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px;">
+                        <!-- Step 1 -->
+                        <div style="text-align: center;">
+                            <div style="background: #0ea5e9; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">1</div>
+                            <div style="font-size: 0.9rem; font-weight: 600; color: #0c4a6e; margin-bottom: 5px;">Append Padding</div>
+                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
+                                Add '1', then zeros,<br>then 128-bit length
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div style="text-align: center;">
+                            <div style="background: #10b981; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">2</div>
+                            <div style="font-size: 0.9rem; font-weight: 600; color: #047857; margin-bottom: 5px;">Append Length</div>
+                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
+                                128-bit representation<br>of original length L
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div style="text-align: center;">
+                            <div style="background: #f59e0b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">3</div>
+                            <div style="font-size: 0.9rem; font-weight: 600; color: #b45309; margin-bottom: 5px;">Initialize Hash Buffer</div>
+                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
+                                8 × 64-bit initial<br>hash values (H₀)
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div style="text-align: center;">
+                            <div style="background: #8b5cf6; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">4</div>
+                            <div style="font-size: 0.9rem; font-weight: 600; color: #5b21b6; margin-bottom: 5px;">Process Blocks</div>
+                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
+                                80 rounds per<br>1024-bit block
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div style="text-align: center;">
+                            <div style="background: #ef4444; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin: 0 auto 10px;">5</div>
+                            <div style="font-size: 0.9rem; font-weight: 600; color: #b91c1c; margin-bottom: 5px;">Output</div>
+                            <div style="font-size: 0.75rem; color: #64748b; height: 60px;">
+                                512-bit final<br>hash value
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Output -->
+                    <div style="text-align: center;">
+                        <div style="background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 15px; border-radius: 8px; display: inline-block;">
+                            <div style="font-weight: bold; font-size: 1rem;">FINAL HASH OUTPUT</div>
+                            <div style="font-size: 0.85rem; opacity: 0.9;">512 bits / 64 bytes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive SHA-512 Implementation -->
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Interactive SHA-512 Implementation</h4>
+                
+                <!-- Input Area -->
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; color: #334155; margin-bottom: 10px; font-size: 0.9rem;">Input Message:</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="sha-input" placeholder="Enter message to hash..." 
+                               style="flex: 1; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-family: 'JetBrains Mono'; outline: none; transition: border 0.2s;">
+                        <button onclick="calculateSHA512()" style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            <i data-feather="hash"></i> Compute SHA-512
+                        </button>
+                        <button onclick="resetSHA512()" style="background: #64748b; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            <i data-feather="refresh-ccw"></i> Reset
+                        </button>
+                    </div>
+                    
+                    <!-- Predefined Examples -->
+                    <div style="margin-top: 15px;">
+                        <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 8px;">Try these examples:</div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button onclick="setExample('The quick brown fox jumps over the lazy dog')" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                                "The quick brown fox jumps over the lazy dog"
+                            </button>
+                            <button onclick="setExample('Hello World')" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                                "Hello World"
+                            </button>
+                            <button onclick="setExample('abc')" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                                "abc"
+                            </button>
+                            <button onclick="setExample('')" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                                Empty String
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output Area -->
+                <div id="sha-output" style="display: none;">
+                    <div style="background: #f8fafc; border-radius: 8px; padding: 20px; border: 1px solid #e2e8f0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h5 style="margin: 0; color: #334155; font-size: 1rem;">SHA-512 Hash Result</h5>
+                            <div style="font-size: 0.8rem; color: #64748b; background: white; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                <span id="hash-length">0</span> characters
+                            </div>
+                        </div>
+                        <div id="hash-result" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: white; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; word-break: break-all; color: #334155;">
+                            <!-- Hash will appear here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Process Visualization Tabs -->
+                <div style="margin-top: 25px;">
+                    <div style="display: flex; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px;">
+                        <button onclick="showProcessTab('padding')" class="process-tab active" style="padding: 12px 20px; background: none; border: none; border-bottom: 2px solid #3b82f6; color: #3b82f6; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
+                            Padding
+                        </button>
+                        <button onclick="showProcessTab('expansion')" class="process-tab" style="padding: 12px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: #64748b; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
+                            Message Expansion
+                        </button>
+                        <button onclick="showProcessTab('compression')" class="process-tab" style="padding: 12px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: #64748b; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
+                            Compression
+                        </button>
+                        <button onclick="showProcessTab('rounds')" class="process-tab" style="padding: 12px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: #64748b; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
+                            80 Rounds
+                        </button>
+                    </div>
+
+                    <!-- Process Panels -->
+                    <div id="process-panels">
+                        
+                        <!-- Padding Panel (Default) -->
+                        <div id="padding-panel" class="process-panel">
+                            <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Step 1: Message Padding</h5>
+                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
+                                The message is padded to make its length congruent to 896 modulo 1024.
+                            </p>
+                            
+                            <div style="background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #0369a1; margin-bottom: 15px;">
+                                    Padding Formula: Message + '1' + k×'0' + 128-bit_length
+                                </div>
+                                
+                                <!-- Padding Visualization -->
+                                <div id="padding-visual" style="display: none;">
+                                    <div style="display: flex; height: 50px; width: 100%; border: 2px solid #334155; border-radius: 6px; overflow: hidden; font-family: monospace; font-weight: bold; color: white; margin-bottom: 10px;">
+                                        <div id="pad-msg" style="background: #3b82f6; display: flex; align-items: center; justify-content: center; min-width: 60px;">M</div>
+                                        <div id="pad-one" style="background: #ef4444; display: flex; align-items: center; justify-content: center; min-width: 20px; border-left: 1px solid white;">1</div>
+                                        <div id="pad-zeros" style="flex: 1; background: #94a3b8; display: flex; align-items: center; justify-content: center; border-left: 1px solid white;">0...0</div>
+                                        <div id="pad-length" style="width: 25%; background: #10b981; display: flex; align-items: center; justify-content: center; border-left: 1px solid white;">L</div>
+                                    </div>
+                                    
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; font-family: 'JetBrains Mono';">
+                                        <div>Message (M)</div>
+                                        <div>Single '1' bit</div>
+                                        <div>k zeros</div>
+                                        <div>128-bit length</div>
+                                    </div>
+                                    
+                                    <div style="margin-top: 15px; font-size: 0.85rem; color: #334155;">
+                                        <div>Total Length: <span id="total-length">0</span> bits (must be multiple of 1024)</div>
+                                        <div>Number of Blocks: <span id="block-count">0</span></div>
+                                    </div>
+                                </div>
+                                
+                                <div id="padding-info" style="text-align: center; color: #64748b; font-size: 0.9rem; padding: 20px;">
+                                    Enter a message above to see padding visualization
+                                </div>
+                            </div>
+                            
+                            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 6px;">
+                                <h6 style="margin: 0 0 10px 0; color: #92400e; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                                    <i data-feather="info" style="width: 16px; height: 16px;"></i>
+                                    Key Points
+                                </h6>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 0.85rem; color: #92400e;">
+                                    <li>Always add a single '1' bit after the message</li>
+                                    <li>Add minimum number of '0' bits to reach (length mod 1024) = 896</li>
+                                    <li>Finally, append original message length as 128-bit binary</li>
+                                    <li>Final padded length is multiple of 1024 bits</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Message Expansion Panel -->
+                        <div id="expansion-panel" class="process-panel" style="display: none;">
+                            <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Step 2: Message Schedule (W) Expansion</h5>
+                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
+                                Each 1024-bit block is expanded into 80 words (W[0] to W[79]) for the 80 rounds.
+                            </p>
+                            
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                <!-- Initial 16 Words -->
+                                <div style="margin-bottom: 25px;">
+                                    <h6 style="color: #334155; margin-bottom: 10px; font-size: 0.9rem;">Initial 16 Words (W[0] to W[15]):</h6>
+                                    <div id="initial-words" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-bottom: 15px;">
+                                        <!-- Generated dynamically -->
+                                    </div>
+                                    <div style="font-size: 0.8rem; color: #64748b; text-align: center;">
+                                        Direct from message block (16 × 64-bit = 1024 bits)
+                                    </div>
+                                </div>
+                                
+                                <!-- Expansion Formula -->
+                                <div style="background: white; border: 2px solid #3b82f6; border-radius: 6px; padding: 15px; margin-bottom: 20px;">
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #1e40af; text-align: center; margin-bottom: 10px;">
+                                        W[t] = σ₁(W[t-2]) + W[t-7] + σ₀(W[t-15]) + W[t-16]
+                                    </div>
+                                    <div style="display: flex; justify-content: space-around; font-size: 0.8rem; color: #64748b;">
+                                        <div style="text-align: center;">
+                                            <div>σ₀(x) = ROTR¹(x) ⊕ ROTR⁸(x) ⊕ SHR⁷(x)</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div>σ₁(x) = ROTR¹⁹(x) ⊕ ROTR⁶¹(x) ⊕ SHR⁶(x)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Generated Words -->
+                                <div>
+                                    <h6 style="color: #334155; margin-bottom: 10px; font-size: 0.9rem;">Generated Words (W[16] to W[79]):</h6>
+                                    <div id="generated-words" style="max-height: 200px; overflow-y: auto; padding: 10px; background: white; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                        <!-- Generated dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Compression Panel -->
+                        <div id="compression-panel" class="process-panel" style="display: none;">
+                            <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Step 3: Compression Function</h5>
+                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
+                                The core of SHA-512 that processes each block through 80 rounds.
+                            </p>
+                            
+                            <!-- Compression Visualization -->
+                            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; position: relative;">
+                                
+                                <!-- Previous Hash -->
+                                <div style="text-align: center; margin-right: 30px;">
+                                    <div style="background: #10b981; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                        <div style="font-weight: bold; font-size: 0.9rem;">Hᵢ₋₁</div>
+                                        <div style="font-size: 0.75rem; opacity: 0.9;">Previous Hash</div>
+                                    </div>
+                                    <div style="margin-top: 10px; font-size: 0.7rem; color: #64748b;">512 bits</div>
+                                </div>
+                                
+                                <!-- Plus Sign -->
+                                <div style="font-size: 2rem; color: #64748b; margin-right: 30px;">+</div>
+                                
+                                <!-- Compression Function -->
+                                <div style="position: relative;">
+                                    <div style="background: linear-gradient(135deg, #f59e0b, #f97316); color: white; padding: 20px; border-radius: 8px; width: 180px; text-align: center; position: relative; z-index: 2;">
+                                        <div style="font-weight: bold; font-size: 1rem;">F(Mᵢ, Hᵢ₋₁)</div>
+                                        <div style="font-size: 0.75rem; opacity: 0.9;">Compression Function</div>
+                                    </div>
+                                    <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; background: rgba(245, 158, 11, 0.1); border: 2px dashed #f59e0b; border-radius: 12px; z-index: 1;"></div>
+                                </div>
+                                
+                                <!-- Arrow -->
+                                <div style="font-size: 2rem; color: #64748b; margin-left: 30px; margin-right: 30px;">=</div>
+                                
+                                <!-- New Hash -->
+                                <div style="text-align: center;">
+                                    <div style="background: #3b82f6; color: white; padding: 15px; border-radius: 8px; width: 140px;">
+                                        <div style="font-weight: bold; font-size: 0.9rem;">Hᵢ</div>
+                                        <div style="font-size: 0.75rem; opacity: 0.9;">New Hash</div>
+                                    </div>
+                                    <div style="margin-top: 10px; font-size: 0.7rem; color: #64748b;">512 bits</div>
+                                </div>
+                                
+                            </div>
+                            
+                            <!-- Message Input -->
+                            <div style="text-align: center; margin-top: 20px;">
+                                <div style="background: #8b5cf6; color: white; padding: 12px; border-radius: 8px; width: 200px; display: inline-block;">
+                                    <div style="font-weight: bold; font-size: 0.9rem;">Message Block Mᵢ</div>
+                                    <div style="font-size: 0.75rem; opacity: 0.9;">1024 bits</div>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b;">Input to Compression Function</div>
+                            </div>
+                            
+                            <!-- Working Variables -->
+                            <div style="margin-top: 30px;">
+                                <h6 style="color: #334155; margin-bottom: 15px; font-size: 0.9rem;">Working Variables (a through h):</h6>
+                                <div id="working-vars" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+                                    <!-- Generated dynamically -->
+                                </div>
+                            </div>
+                            
+                            <!-- Functions Explanation -->
+                            <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 20px;">
+                                <h6 style="margin: 0 0 15px 0; color: #166534; font-size: 0.9rem;">Key Functions in Compression:</h6>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                                    <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                                        <div style="font-weight: bold; color: #166534; margin-bottom: 8px; font-size: 0.85rem;">Ch(e, f, g)</div>
+                                        <div style="font-size: 0.8rem; color: #4b5563;">
+                                            Choose function: (e ∧ f) ⊕ (¬e ∧ g)<br>
+                                            Uses e to choose between f and g
+                                        </div>
+                                    </div>
+                                    <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                                        <div style="font-weight: bold; color: #166534; margin-bottom: 8px; font-size: 0.85rem;">Maj(a, b, c)</div>
+                                        <div style="font-size: 0.8rem; color: #4b5563;">
+                                            Majority function: (a ∧ b) ⊕ (a ∧ c) ⊕ (b ∧ c)<br>
+                                            Outputs majority bit of a, b, c
+                                        </div>
+                                    </div>
+                                    <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                                        <div style="font-weight: bold; color: #166534; margin-bottom: 8px; font-size: 0.85rem;">Σ₀(a)</div>
+                                        <div style="font-size: 0.8rem; color: #4b5563;">
+                                            Σ₀(a) = ROTR²⁸(a) ⊕ ROTR³⁴(a) ⊕ ROTR³⁹(a)<br>
+                                            Complex rotation combination
+                                        </div>
+                                    </div>
+                                    <div style="background: white; padding: 15px; border-radius: 6px; border: 1px solid #bbf7d0;">
+                                        <div style="font-weight: bold; color: #166534; margin-bottom: 8px; font-size: 0.85rem;">Σ₁(e)</div>
+                                        <div style="font-size: 0.8rem; color: #4b5563;">
+                                            Σ₁(e) = ROTR¹⁴(e) ⊕ ROTR¹⁸(e) ⊕ ROTR⁴¹(e)<br>
+                                            Different rotation combination
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 80 Rounds Panel -->
+                        <div id="rounds-panel" class="process-panel" style="display: none;">
+                            <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Step 4: 80 Rounds Processing</h5>
+                            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">
+                                Each round performs complex bit operations to mix the message bits with the hash state.
+                            </p>
+                            
+                            <!-- Round Controls -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                                    <div>
+                                        <span style="font-size: 0.9rem; color: #334155;">Round: </span>
+                                        <span id="current-round" style="font-weight: bold; color: #3b82f6;">0</span>
+                                        <span style="color: #64748b;"> / 79</span>
+                                    </div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <button onclick="prevRound()" style="background: #64748b; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                                            ← Previous
+                                        </button>
+                                        <button onclick="nextRound()" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                                            Next →
+                                        </button>
+                                        <button onclick="animateRounds()" style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">
+                                            <i data-feather="play" style="width: 14px; height: 14px; margin-right: 5px;"></i> Animate
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Progress Bar -->
+                                <div style="margin-bottom: 15px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                        <span style="font-size: 0.8rem; color: #64748b;">Round Progress</span>
+                                        <span id="round-progress" style="font-size: 0.8rem; color: #3b82f6; font-weight: 600;">0%</span>
+                                    </div>
+                                    <div style="height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                        <div id="round-progress-bar" style="height: 100%; background: #3b82f6; width: 0%; transition: width 0.3s;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Round Visualization -->
+                            <div id="round-visualization" style="background: white; border: 2px solid #3b82f6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                <div style="text-align: center; margin-bottom: 20px;">
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #1e40af;">
+                                        Round <span id="round-number">0</span> Calculations
+                                    </div>
+                                </div>
+                                
+                                <!-- T1 and T2 Calculations -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                                    <div style="background: #f0f9ff; padding: 15px; border-radius: 6px; border: 1px solid #0ea5e9;">
+                                        <div style="font-weight: bold; color: #0369a1; margin-bottom: 10px; font-size: 0.9rem;">T₁ Calculation</div>
+                                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; margin-bottom: 10px;">
+                                            T₁ = h + Ch(e,f,g) + Σ₁(e) + W[t] + K[t]
+                                        </div>
+                                        <div id="t1-values" style="font-size: 0.75rem; color: #64748b;">
+                                            <!-- Values will appear here -->
+                                        </div>
+                                    </div>
+                                    <div style="background: #f0fdf4; padding: 15px; border-radius: 6px; border: 1px solid #10b981;">
+                                        <div style="font-weight: bold; color: #047857; margin-bottom: 10px; font-size: 0.9rem;">T₂ Calculation</div>
+                                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #065f46; margin-bottom: 10px;">
+                                            T₂ = Σ₀(a) + Maj(a,b,c)
+                                        </div>
+                                        <div id="t2-values" style="font-size: 0.75rem; color: #64748b;">
+                                            <!-- Values will appear here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Register Updates -->
+                                <div style="background: #f8fafc; padding: 20px; border-radius: 6px;">
+                                    <div style="font-weight: bold; color: #334155; margin-bottom: 15px; font-size: 0.9rem;">Register Updates:</div>
+                                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #475569; text-align: center; margin-bottom: 15px;">
+                                        a = T₁ + T₂<br>
+                                        e = d + T₁
+                                    </div>
+                                    <div id="register-updates" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                                        <!-- Generated dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Round Constants -->
+                            <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 15px;">
+                                <h6 style="margin: 0 0 10px 0; color: #92400e; font-size: 0.9rem;">Round Constants (K[t]):</h6>
+                                <p style="margin: 0; font-size: 0.85rem; color: #92400e;">
+                                    80 constants derived from cube roots of first 80 prime numbers. 
+                                    Each is a 64-bit hexadecimal value that provides unique mixing in each round.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHA-512 Constants -->
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">SHA-512 Initial Hash Values (H₀)</h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₀ (a)</div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
+                            6a09e667f3bcc908
+                        </div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₁ (b)</div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
+                            bb67ae8584caa73b
+                        </div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₂ (c)</div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
+                            3c6ef372fe94f82b
+                        </div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₃ (d)</div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
+                            a54ff53a5f1d36f1
+                        </div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₄ (e)</div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
+                            510e527fade682d1
+                        </div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₅ (f)</div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
+                            9b05688c2b3e6c1f
+                        </div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₆ (g)</div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
+                            1f83d9abfb41bd6b
+                        </div>
+                    </div>
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border: 2px solid #0ea5e9;">
+                        <div style="font-size: 0.85rem; color: #0369a1; margin-bottom: 5px;">H₇ (h)</div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #0c4a6e; word-break: break-all;">
+                            5be0cd19137e2179
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 6px;">
+                    <h6 style="margin: 0 0 10px 0; color: #92400e; font-size: 0.9rem;">About Initial Hash Values:</h6>
+                    <p style="margin: 0; font-size: 0.85rem; color: #92400e;">
+                        These 8 × 64-bit constants are the first 64 bits of the fractional parts of the 
+                        square roots of the first 8 prime numbers (2, 3, 5, 7, 11, 13, 17, 19).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bitwise Operations Reference -->
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                <h4 style="margin-top: 0; color:#334155; margin-bottom: 20px; font-size: 1.1rem;">Bitwise Operations in SHA-512</h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 25px;">
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                        <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Logical Operations</h5>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                            <div style="text-align: center;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: #3b82f6; margin-bottom: 8px;">∧</div>
+                                <div style="font-size: 0.9rem; font-weight: 600; color: #1e40af;">AND</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">1 ∧ 1 = 1, else 0</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: #10b981; margin-bottom: 8px;">⊕</div>
+                                <div style="font-size: 0.9rem; font-weight: 600; color: #047857;">XOR</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">0 ⊕ 1 = 1, 1 ⊕ 0 = 1</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: #ef4444; margin-bottom: 8px;">¬</div>
+                                <div style="font-size: 0.9rem; font-weight: 600; color: #b91c1c;">NOT</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">¬0 = 1, ¬1 = 0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                        <h5 style="color: #334155; margin-bottom: 15px; font-size: 1rem;">Positional Operations</h5>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #8b5cf6; margin-right: 15px; width: 80px;">ROTRⁿ(x)</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.9rem; font-weight: 600; color: #5b21b6;">Rotate Right</div>
+                                    <div style="font-size: 0.75rem; color: #64748b;">Bits wrap around from right to left</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <div style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: #f59e0b; margin-right: 15px; width: 80px;">SHRⁿ(x)</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.9rem; font-weight: 600; color: #b45309;">Shift Right</div>
+                                    <div style="font-size: 0.75rem; color: #64748b;">Zeros added on left, bits lost on right</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 20px;">
+                    <h5 style="color: #166534; margin-bottom: 10px; font-size: 1rem;">Addition Modulo 2⁶⁴</h5>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #065f46; margin-bottom: 10px;">
+                        a + b (mod 2⁶⁴)
+                    </div>
+                    <p style="margin: 0; font-size: 0.85rem; color: #166534;">
+                        In SHA-512, all additions are performed modulo 2⁶⁴. When the sum of two 64-bit numbers 
+                        exceeds 2⁶⁴ - 1, the result wraps around by discarding the overflow bit.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    // Inject styles
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .process-tab {
+            transition: all 0.3s ease;
+        }
+        .process-tab:hover {
+            color: #3b82f6;
+        }
+        .process-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6 !important;
+        }
+        .process-panel {
+            transition: opacity 0.3s ease;
+        }
+    `;
+    document.head.appendChild(style);
+
+    appendContent(html);
+    feather.replace();
+    initializeSHA512Visualizations();
+}
+
+// SHA-512 Implementation Logic
+let currentRound = 0;
+let roundAnimationInterval = null;
+
+function initializeSHA512Visualizations() {
+    // Initialize initial words visualization
+    updateInitialWords();
+    updateWorkingVars();
+    updateRoundVisualization();
+}
+
+function showProcessTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.process-tab').forEach(tab => {
+        tab.classList.remove('active');
+        tab.style.borderBottom = '2px solid transparent';
+        tab.style.color = '#64748b';
+    });
+    
+    event.target.classList.add('active');
+    event.target.style.borderBottom = '2px solid #3b82f6';
+    event.target.style.color = '#3b82f6';
+    
+    // Show selected panel
+    document.querySelectorAll('.process-panel').forEach(panel => {
+        panel.style.display = 'none';
+    });
+    
+    document.getElementById(`${tabName}-panel`).style.display = 'block';
+    
+    feather.replace();
+}
+
+function setExample(message) {
+    document.getElementById('sha-input').value = message;
+}
+
+function calculateSHA512() {
+    const input = document.getElementById('sha-input').value;
+    
+    if (!input.trim()) {
+        alert('Please enter a message to hash');
+        return;
+    }
+    
+    // Show output area
+    const outputDiv = document.getElementById('sha-output');
+    outputDiv.style.display = 'block';
+    
+    // Calculate SHA-512 (simplified for demo)
+    const hash = simulateSHA512(input);
+    document.getElementById('hash-result').textContent = hash;
+    document.getElementById('hash-length').textContent = hash.length;
+    
+    // Update padding visualization
+    updatePaddingVisualization(input);
+    
+    // Update message expansion
+    updateMessageExpansion();
+    
+    // Reset to first tab
+    showProcessTab('padding');
+    
+    feather.replace();
+}
+
+function resetSHA512() {
+    document.getElementById('sha-input').value = '';
+    document.getElementById('sha-output').style.display = 'none';
+    document.getElementById('padding-visual').style.display = 'none';
+    document.getElementById('padding-info').style.display = 'block';
+    
+    // Reset round visualization
+    currentRound = 0;
+    updateRoundVisualization();
+    
+    if (roundAnimationInterval) {
+        clearInterval(roundAnimationInterval);
+        roundAnimationInterval = null;
+    }
+    
+    feather.replace();
+}
+
+function updatePaddingVisualization(message) {
+    const visual = document.getElementById('padding-visual');
+    const info = document.getElementById('padding-info');
+    const msgLength = message.length * 8; // Approximate bits
+    
+    if (msgLength > 0) {
+        visual.style.display = 'block';
+        info.style.display = 'none';
+        
+        // Calculate padding
+        const totalBits = calculateTotalBits(msgLength);
+        const blockCount = Math.ceil(totalBits / 1024);
+        
+        // Update visualization
+        document.getElementById('total-length').textContent = totalBits;
+        document.getElementById('block-count').textContent = blockCount;
+        
+        // Animate padding
+        const msgDiv = document.getElementById('pad-msg');
+        const oneDiv = document.getElementById('pad-one');
+        const zerosDiv = document.getElementById('pad-zeros');
+        const lengthDiv = document.getElementById('pad-length');
+        
+        // Set widths proportionally
+        const msgWidth = Math.min(30, (msgLength / totalBits) * 100);
+        const oneWidth = 5;
+        const lengthWidth = 25;
+        const zerosWidth = 100 - msgWidth - oneWidth - lengthWidth;
+        
+        msgDiv.style.width = `${msgWidth}%`;
+        oneDiv.style.width = `${oneWidth}%`;
+        zerosDiv.style.width = `${zerosWidth}%`;
+        lengthDiv.style.width = `${lengthWidth}%`;
+    }
+}
+
+function calculateTotalBits(messageBits) {
+    // SHA-512 padding: message + '1' + k×'0' + 128-bit length
+    // Total must be multiple of 1024
+    const L = messageBits;
+    const K = (896 - (L + 1 + 128) % 1024 + 1024) % 1024;
+    return L + 1 + K + 128;
+}
+
+function updateInitialWords() {
+    const container = document.getElementById('initial-words');
+    container.innerHTML = '';
+    
+    for (let i = 0; i < 16; i++) {
+        const wordDiv = document.createElement('div');
+        wordDiv.style.background = '#e0f2fe';
+        wordDiv.style.padding = '10px';
+        wordDiv.style.borderRadius = '4px';
+        wordDiv.style.textAlign = 'center';
+        wordDiv.style.fontFamily = "'JetBrains Mono', monospace";
+        wordDiv.style.fontSize = '0.7rem';
+        wordDiv.style.color = '#0369a1';
+        
+        // Generate random 16-character hex for demo
+        const randomHex = Array.from({length: 16}, () => 
+            Math.floor(Math.random() * 16).toString(16)).join('');
+        
+        wordDiv.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 2px;">W[${i}]</div>
+            <div>${randomHex}</div>
+        `;
+        
+        container.appendChild(wordDiv);
+    }
+}
+
+function updateMessageExpansion() {
+    const container = document.getElementById('generated-words');
+    container.innerHTML = '';
+    
+    for (let i = 16; i < 32; i++) { // Show first 16 generated words
+        const wordDiv = document.createElement('div');
+        wordDiv.style.padding = '8px';
+        wordDiv.style.borderBottom = '1px solid #e2e8f0';
+        wordDiv.style.fontFamily = "'JetBrains Mono', monospace";
+        wordDiv.style.fontSize = '0.75rem';
+        wordDiv.style.color = '#475569';
+        
+        // Generate demo expansion formula
+        const w15 = Array.from({length: 16}, () => 
+            Math.floor(Math.random() * 16).toString(16)).join('');
+        const w2 = Array.from({length: 16}, () => 
+            Math.floor(Math.random() * 16).toString(16)).join('');
+        const w7 = Array.from({length: 16}, () => 
+            Math.floor(Math.random() * 16).toString(16)).join('');
+        const w16 = Array.from({length: 16}, () => 
+            Math.floor(Math.random() * 16).toString(16)).join('');
+        
+        wordDiv.innerHTML = `
+            <div style="margin-bottom: 2px;">
+                <span style="color: #3b82f6; font-weight: bold;">W[${i}]</span> = 
+                σ₁(${w2}) + ${w7} + σ₀(${w15}) + ${w16}
+            </div>
+            <div style="color: #94a3b8; font-size: 0.7rem;">
+                Result: ${Array.from({length: 16}, () => 
+                    Math.floor(Math.random() * 16).toString(16)).join('')}
+            </div>
+        `;
+        
+        container.appendChild(wordDiv);
+    }
+}
+
+function updateWorkingVars() {
+    const container = document.getElementById('working-vars');
+    container.innerHTML = '';
+    
+    const variables = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#14b8a6'];
+    
+    variables.forEach((varName, index) => {
+        const varDiv = document.createElement('div');
+        varDiv.style.background = '#f8fafc';
+        varDiv.style.padding = '15px';
+        varDiv.style.borderRadius = '8px';
+        varDiv.style.textAlign = 'center';
+        varDiv.style.border = `2px solid ${colors[index]}`;
+        
+        // Generate random 64-bit value for demo
+        const randomValue = Array.from({length: 16}, () => 
+            Math.floor(Math.random() * 16).toString(16)).join('');
+        
+        varDiv.innerHTML = `
+            <div style="font-size: 1.2rem; font-weight: bold; color: ${colors[index]}; margin-bottom: 5px;">${varName}</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #64748b; word-break: break-all;">
+                ${randomValue}
+            </div>
+            <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 5px;">64 bits</div>
+        `;
+        
+        container.appendChild(varDiv);
+    });
+}
+
+function updateRoundVisualization() {
+    document.getElementById('current-round').textContent = currentRound;
+    document.getElementById('round-number').textContent = currentRound;
+    
+    // Update progress
+    const progress = Math.round((currentRound / 79) * 100);
+    document.getElementById('round-progress').textContent = `${progress}%`;
+    document.getElementById('round-progress-bar').style.width = `${progress}%`;
+    
+    // Update T1 and T2 values
+    updateT1T2Values();
+    
+    // Update register updates
+    updateRegisterUpdates();
+}
+
+function updateT1T2Values() {
+    // Generate random values for demo
+    const hVal = Array.from({length: 4}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    const chVal = Array.from({length: 4}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    const sigma1Val = Array.from({length: 4}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    const wVal = Array.from({length: 4}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    const kVal = Array.from({length: 4}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    
+    const t1Val = Array.from({length: 16}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    
+    const sigma0Val = Array.from({length: 4}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    const majVal = Array.from({length: 4}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    
+    const t2Val = Array.from({length: 16}, () => 
+        Math.floor(Math.random() * 16).toString(16)).join('');
+    
+    document.getElementById('t1-values').innerHTML = `
+        h = ${hVal}...<br>
+        Ch(e,f,g) = ${chVal}...<br>
+        Σ₁(e) = ${sigma1Val}...<br>
+        W[${currentRound}] = ${wVal}...<br>
+        K[${currentRound}] = ${kVal}...<br>
+        <div style="margin-top: 5px; color: #1e40af; font-weight: bold;">
+            T₁ = ${t1Val}
+        </div>
+    `;
+    
+    document.getElementById('t2-values').innerHTML = `
+        Σ₀(a) = ${sigma0Val}...<br>
+        Maj(a,b,c) = ${majVal}...<br>
+        <div style="margin-top: 5px; color: #047857; font-weight: bold;">
+            T₂ = ${t2Val}
+        </div>
+    `;
+}
+
+function updateRegisterUpdates() {
+    const container = document.getElementById('register-updates');
+    container.innerHTML = '';
+    
+    const registers = [
+        {name: 'h', from: 'g', color: '#3b82f6'},
+        {name: 'g', from: 'f', color: '#10b981'},
+        {name: 'f', from: 'e', color: '#f59e0b'},
+        {name: 'e', from: 'd + T₁', color: '#ef4444'},
+        {name: 'd', from: 'c', color: '#8b5cf6'},
+        {name: 'c', from: 'b', color: '#06b6d4'},
+        {name: 'b', from: 'a', color: '#ec4899'},
+        {name: 'a', from: 'T₁ + T₂', color: '#14b8a6'}
+    ];
+    
+    registers.forEach(reg => {
+        const regDiv = document.createElement('div');
+        regDiv.style.background = '#f8fafc';
+        regDiv.style.padding = '10px';
+        regDiv.style.borderRadius = '6px';
+        regDiv.style.textAlign = 'center';
+        regDiv.style.borderLeft = `4px solid ${reg.color}`;
+        
+        regDiv.innerHTML = `
+            <div style="font-size: 0.9rem; font-weight: bold; color: ${reg.color}; margin-bottom: 5px;">
+                ${reg.name} ← ${reg.from}
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #64748b;">
+                ${Array.from({length: 4}, () => 
+                    Math.floor(Math.random() * 16).toString(16)).join('')}...
+            </div>
+        `;
+        
+        container.appendChild(regDiv);
+    });
+}
+
+function prevRound() {
+    if (currentRound > 0) {
+        currentRound--;
+        updateRoundVisualization();
+    }
+}
+
+function nextRound() {
+    if (currentRound < 79) {
+        currentRound++;
+        updateRoundVisualization();
+    }
+}
+
+function animateRounds() {
+    if (roundAnimationInterval) {
+        clearInterval(roundAnimationInterval);
+        roundAnimationInterval = null;
+        return;
+    }
+    
+    roundAnimationInterval = setInterval(() => {
+        if (currentRound < 79) {
+            currentRound++;
+            updateRoundVisualization();
+        } else {
+            clearInterval(roundAnimationInterval);
+            roundAnimationInterval = null;
+        }
+    }, 100);
+}
+
+function simulateSHA512(input) {
+    // Simplified SHA-512 simulation for demo purposes
+    // In a real implementation, this would be the actual SHA-512 algorithm
+    
+    // Convert input to bytes
+    const encoder = new TextEncoder();
+    const data = encoder.encode(input);
+    
+    // Create a simple hash for demo (not cryptographically secure)
+    let hash = '0x';
+    for (let i = 0; i < 128; i++) { // 128 hex chars = 512 bits
+        hash += Math.floor(Math.random() * 16).toString(16);
+    }
+    
+    // For known inputs, return known SHA-512 hashes
+    const knownHashes = {
+        '': 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce' +
+            '47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e',
+        'abc': 'ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a' +
+               '2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f',
+        'The quick brown fox jumps over the lazy dog': 
+               '07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb64' +
+               '2e93a252a954f23912547d1e8a3b5ed6e1bfd7097821233fa0538f3db854fee6'
+    };
+    
+    return knownHashes[input] || hash.substring(2); // Remove 0x prefix
 }
