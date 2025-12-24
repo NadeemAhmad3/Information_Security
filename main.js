@@ -303,7 +303,7 @@ function loadModule(moduleName) {
     }
     else if (moduleName === 'des') {
         pageTitle.innerText = "DES Workspace";
-        contentArea.innerHTML = `<div class="module-card" style="grid-column: span 3;"><h3>DES Logic Loading...</h3></div>`;
+        renderDES(contentArea);
     }
     else if (moduleName === 'sha512') {
         pageTitle.innerText = "SHA-512 Laboratory";
