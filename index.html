@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CipherLab | Security Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="brand">
+            <i data-feather="shield" class="brand-icon"></i>
+            <h2>CipherLab</h2>
+        </div>
+        
+        <div class="menu-label">CORE MODULES</div>
+        <ul class="nav-links">
+            <li class="active" onclick="loadModule('dashboard')">
+                <i data-feather="grid"></i> <span>Command Center</span>
+            </li>
+            <li onclick="loadModule('aes')">
+                <i data-feather="lock"></i> <span>AES Algorithm</span>
+            </li>
+            <li onclick="loadModule('des')">
+                <i data-feather="layers"></i> <span>DES Feistel</span>
+            </li>
+            <li onclick="loadModule('sha512')">
+                <i data-feather="hash"></i> <span>SHA-512 Hashing</span>
+            </li>
+        </ul>
+
+        
+
+        <div class="user-profile">
+            <div class="avatar"><i data-feather="user"></i></div>
+            <div class="user-info">
+                <p class="name">Security Analyst</p>
+                <p class="status">Level: 1 (Novice)</p>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header>
+            <div class="header-left">
+                <h1 id="page-title">System Overview</h1>
+                <p id="page-subtitle">Exam Preparation Status: <span class="badge">Active</span></p>
+            </div>
+            <div class="header-right">
+                <button class="btn-secondary"><i data-feather="bell"></i></button>
+                <button class="btn-primary"><i data-feather="play"></i> Resume Study</button>
+            </div>
+        </header>
+
+        <div id="content-area" class="dashboard-grid">
+            </div>
+    </main>
+    <script src="sha512.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Initialize Icons
+        feather.replace();
+    </script>
+</body>
+</html>
